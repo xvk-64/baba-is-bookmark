@@ -3,6 +3,17 @@
 	"description": "A bookmark app for locating levels for Baba Is You",
 	"version": "0.1.1",
 	"engines": {
-	  "node": "14.x"
+		"node": "15.x"
+	},
+	"dependencies": {
+		"express": "^4.17.1",
+		"express-rate-limit": "^5.2.3",
+		"helmet": "^4.2.0",
+		"http": "^0.0.1-security"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.9",
+		"@types/express-rate-limit": "^5.1.0",
+		"@types/helmet": "^4.0.0"
 	}
-  }
+}
