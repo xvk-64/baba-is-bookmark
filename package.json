@@ -1,0 +1,8 @@
+{
+	"name": "baba-is-bookmark",
+	"description": "A bookmark app for locating levels for Baba Is You",
+	"version": "0.1.1",
+	"engines": {
+	  "node": "14.x"
+	}
+  }
