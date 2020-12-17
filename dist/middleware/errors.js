@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.internalError = (err, req, res, next) => {
+exports.internalError = void 0;
+const internalError = (err, req, res, next) => {
     // handle error here
     console.log(`Internal error ${err}`);
     res.render('error', {
@@ -8,3 +9,4 @@ exports.internalError = (err, req, res, next) => {
         message: 'Internal server error :('
     });
 };
+exports.internalError = internalError;
