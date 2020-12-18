@@ -17,5 +17,5 @@
   "compileOnSave": false,
   "include": [
     "src"
-  ]
+, "src/app/node_modules/components/Main"  ]
 }
