@@ -9,11 +9,11 @@ const app = express()
 console.log(`Setting port to ${APP_PORT}`)
 app.set('port', APP_PORT)
 
-app.get('/', (request, response) => {
-	response.sendFile(path.join(__dirname, 'public/index.html'))
-})
+app.use("/", express.static(path.join(__dirname, "public")))
 
 const server = http.createServer(app)
 server.listen(APP_PORT)
 
-
+app.get('/', (request, response) => {
+	response.sendFile(path.join(__dirname, 'public/index.html'))
+})

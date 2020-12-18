@@ -1,2 +1,2 @@
-web: node dist/index.js
-dev: nodemon dist/index.js
+web: npm run start
+dev: npm run start-dev

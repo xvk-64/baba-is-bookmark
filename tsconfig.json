@@ -1,11 +1,21 @@
 {
   "compilerOptions": {
-    "lib": ["ES2020"],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noEmit": true,
     "module": "commonjs",
-    "target": "ES2020",
-  
-    "outDir": "dist",
-    "rootDir": "src",
-    "watch": true
-  }
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "target": "es5",
+    "jsx": "react",
+    "lib": [
+      "DOM",
+      "es6"
+    ],
+    "rootDir": "src"
+  },
+  "compileOnSave": false,
+  "include": [
+    "src"
+  ]
 }
