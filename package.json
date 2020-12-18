@@ -1,6 +1,6 @@
 {
   "name": "baba-is-bookmark",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   
   "engines": {
@@ -35,7 +35,7 @@
     "start-dev:server": "ts-node-dev src/server/server.ts",
     "start-dev:webpack": "webpack serve",
     "start-dev": "concurrently \"npm run start-dev:server\" \"npm run start-dev:webpack\"",
-    "start": "node dist/server.js"
+    "start": "node ./dist/server.js"
   },
   "eslintConfig": {
     "extends": [
