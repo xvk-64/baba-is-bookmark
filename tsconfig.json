@@ -12,10 +12,11 @@
       "DOM",
       "es6"
     ],
+    "baseUrl": "src",
     "rootDir": "src"
   },
-  "compileOnSave": false,
   "include": [
-    "src"
-, "src/app/node_modules/components/Main"  ]
+    "src/",
+  ],
+  "compileOnSave": false
 }

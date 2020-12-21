@@ -1,0 +1,33 @@
+.main {
+	display: flex;
+	align-items: center;
+}
+
+.main-page {
+	background-color: #121313;
+	width: 1000px;
+
+	margin: auto;
+	margin-top: 120px;
+	margin-bottom: 40px;
+
+	padding: 10px;
+
+	min-height: 600px;
+}
+
+
+@media only screen and (max-width: 1000px) {
+	.main-page {
+		background-color: #121313;
+		width: 100vw;
+	
+		margin: auto;
+		margin-top: 100px;
+		margin-bottom: 0px;
+
+		padding-top: 20px;
+	
+		min-height: 100vh;
+	}
+}

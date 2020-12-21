@@ -1,9 +1,9 @@
 import React from 'react';
+import { NavLink } from "react-router-dom";
 
 import './Navbar.css'
 
 export default function Navbar() {
-
 	return (
 		<nav className="navbar">
 			<div className="navbar-top">
@@ -12,12 +12,17 @@ export default function Navbar() {
 				</span>
 			</div>
 			<div className="navbar-bottom">
-				<span className="navbar-link">
-					FEATURED LEVELS
-				</span>
-				<span className="navbar-link">
-					BROWSE LEVELS
-				</span>
+				<div className="navbar-link-container">
+					<NavLink className="navbar-link" to="/featured">
+						FEATURED LEVELS
+					</NavLink>
+					<NavLink className="navbar-link" exact to="/">
+						BROWSE LEVELS
+					</NavLink>
+					<NavLink className="navbar-link" to="/add">
+						ADD LEVELS
+					</NavLink>
+				</div>
 			</div>
 		</nav>
 	)

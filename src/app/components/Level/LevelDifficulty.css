@@ -1,0 +1,15 @@
+.levelDifficulty-container {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+
+	position: absolute;
+	bottom: 25px;
+	left: 5px;
+
+	width: 200px;
+}
+
+.levelDifficulty-container i {
+	margin: auto;
+}

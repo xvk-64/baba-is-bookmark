@@ -1,0 +1,94 @@
+.level {
+	width: 350px;
+	height: 210px;
+
+	background-color: gray;
+
+	border-radius: 5px;
+
+	position: relative;
+
+	margin: 10px;
+}
+
+.level-header-container {
+	background-color: darkgray;
+
+	height: 40px;
+
+	display: flex;
+	align-items: center;
+	padding-left: 5px;
+
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+}
+
+.level-header {
+	font-size: 12px;
+}
+
+.level-body {
+	background-color: lightgray;
+
+	height: 150px;
+
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.level-author-container {
+	font-size: 10px;
+
+	padding: 5px 10px 0px 10px;
+	
+	display: flex;
+	flex-direction: row;
+}
+
+.level-author {
+	display: block;
+
+	width: 60%;
+	margin: auto;
+}
+
+.level-truncate-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.level-date {
+	display: block;
+
+	width: 40%;
+	margin: auto;
+
+	text-align: right;
+}
+
+.level-thumbnail-container {
+	padding: 5px;
+
+	display: flex;
+	flex-direction: row;
+
+	height: 80px;
+}
+
+.level-thumbnail {
+	height: 80px;
+	width: 154px;
+}
+
+.level-description {
+	margin-left: 5px;
+
+	font-size: 9px;
+	
+	height: 80px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	word-break: break-word;
+}

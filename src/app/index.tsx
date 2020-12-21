@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Main from 'components/Main/Main'
+import App from './components/App'
 import 'assets/styles/global.css';
 import 'assets/styles/backgroundScroll.css';
 
 ReactDOM.render(
-  (<Main />),
+  (<App />),
   document.getElementById('root')
 );

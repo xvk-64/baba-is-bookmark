@@ -1,0 +1,60 @@
+.navbar {
+	display: block;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+
+	z-index: 10;
+}
+
+.navbar-top {
+	background-color: #38393F;
+
+	height: 60px;
+
+	display: flex;
+	align-items: center;
+}
+
+.navbar-logo {
+	font-family: 'Bababig';
+	font-size: 28px;
+	margin: auto;
+	
+	cursor: default;
+}
+
+.navbar-bottom {
+	background-color: #595A5F;
+	
+	height: 40px;
+
+	display: flex;
+	align-items: center;
+}
+
+.navbar-link {
+	font-family: 'Bababig';
+	font-size: 12px;
+	text-decoration: none;
+
+	margin: auto;
+	
+	color:white;
+}
+
+.navbar-link:hover {
+	text-decoration: underline;
+	color: lightgray;
+}
+
+.navbar-link-container {
+	display: flex;
+	align-items: center;
+
+	margin:auto;
+
+	width: 60vw;
+	min-width: 550px;
+}
