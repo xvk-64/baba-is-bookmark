@@ -121,6 +121,34 @@ async function insertLevelData(levelData: LevelData) : Promise<LevelData> {
 	return result.rows[0]
 }
 
+// Download level data for a code from the official server
+router.get("/level:download", async(request, response) => {
+	let levelCode = request.query["code"] + ""
+
+	// Check formatting of levelcode
+	if (!checkLevelCode(levelCode)) {
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+
+	// Check if level is already in database
+	if (await getLevelData(levelCode)) {
+		response.json({error: true, message: `Couldn't download due to database error! Reason: Level already exists in database!`})
+		return
+	}
+
+	// Try and download from the server
+	let levelData
+	try {
+		levelData = await downloadLevelData(levelCode)
+	} catch(e) {
+		response.json({error: true, message: `Couldn't download! Reason: ${e.message}`})
+		return
+	}
+
+	response.json(levelData)
+})
+
 // Download level data for a code from the official server and insert it into the database
 router.post("/level", async(request, response) => {
 	let levelCode = request.query["code"] + ""
@@ -157,7 +185,7 @@ router.post("/level", async(request, response) => {
 	response.json({success: true, message: `Inserted level ${levelCode} successfully`})
 })
 
-
+// Get a list of levels dictated by search terms
 router.get("/browse", async (request, response) => {
 	let result = await pool.query('SELECT * FROM levels ORDER BY timestamp DESC')
 	

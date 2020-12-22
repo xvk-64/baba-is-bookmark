@@ -5,7 +5,6 @@ import {LevelData} from "common/LevelData"
 import './Level.css'
 import 'assets/styles/icons.css'
 
-import image from 'assets/img/RH4C-T468.png'
 import LevelCode from "./LevelCode"
 import LevelDifficulty from "./LevelDifficulty"
 
@@ -41,10 +40,16 @@ function hash(str: string): number {
 }
 
 export default function Level(props: ILevelProps) {
-	let [headerColour, bodyColour, footerColor] = colours[hash(props.levelData.code) % colours.length]
+	let [headerColour, bodyColour, footerColour] = colours[hash(props.levelData.code) % colours.length]
+
+	if (!props.levelData.code) {
+		headerColour = ""
+		bodyColour = ""
+		footerColour = ""
+	}
 
 	return (
-		<div className="level" style={{backgroundColor:footerColor}}>
+		<div className="level" style={{backgroundColor:footerColour}}>
 			<div className="level-header-container" style={{backgroundColor:headerColour}}>
 				<div className="level-header level-truncate-text">
 					{props.levelData.name}
@@ -52,22 +57,35 @@ export default function Level(props: ILevelProps) {
 			</div>
 			<div className="level-body" style={{backgroundColor:bodyColour}}>
 				<div className="level-author-container">
-					<span className="level-author level-truncate-text">
-						By {props.levelData.author?.trimStart()}
-					</span>
+					{
+						props.levelData.author &&
+						<span className="level-author level-truncate-text">
+							By {props.levelData.author?.trimStart()}
+						</span>
+					}
 					<span className="level-date">
 						{props.levelData.timestamp?.toLocaleDateString()}
 					</span>
 				</div>
 				<div className="level-thumbnail-container">
-					<img src={image} className="level-thumbnail"/>
-					<div className="level-description">
-						{props.levelData.description}
-					</div>
+					{
+						props.levelData.code &&
+						<img src={`<LEVELS SERVER URL>/${props.levelData.code}.png`} 
+							className={"level-thumbnail" + (props.levelData.description ? "" : " level-thumbnail-centre")}/>
+					}
+					{
+						props.levelData.description &&
+						<div className="level-description">
+							{props.levelData.description}
+						</div>
+					}
 				</div>
-				<LevelDifficulty levelDifficulty={props.levelData.difficulty || 0} />
+				{
+					props.levelData.difficulty != undefined &&
+					<LevelDifficulty levelDifficulty={props.levelData.difficulty || 0} />
+				}
 			</div>
-			<LevelCode style={{backgroundColor:footerColor}} levelCode={props.levelData.code} />
+			<LevelCode showInCentre={props.levelData.difficulty == undefined} style={{backgroundColor:footerColour}} levelCode={props.levelData.code} />
 		</div>
 	)
 }

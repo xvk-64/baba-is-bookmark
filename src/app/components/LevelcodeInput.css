@@ -1,0 +1,22 @@
+.levelcodeInput-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.levelcodeInput-input {
+	width: 110px;
+	margin: 5px;
+
+	
+}
+
+.levelcodeInput-input-container {
+}
+
+.levelcodeInput-input-error {
+	color: #ff5555;
+	font-size: 8px;
+	
+	height: 30px;
+}

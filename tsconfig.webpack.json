@@ -20,7 +20,7 @@
 		"resolveJsonModule": true,
 		"jsx": "react-jsx",
 		"watch": true,
-		"noEmit": false
+		"noEmit": false,
 	  },
 	  "exclude": [
 		"src/server"

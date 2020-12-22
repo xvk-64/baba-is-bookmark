@@ -3,6 +3,7 @@ import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import Navbar from './Navbar'
 import Browse from './Browse'
+import Add from './Add'
 import Error404 from './404'
 
 import './App.css'
@@ -16,6 +17,7 @@ export default function Main() {
         <div className='main-page'>
           <Switch>
             <Route exact path="/" component={Browse} />
+            <Route exact path="/add" component={Add} />
 
             <Route path="*" component={Error404} />
           </Switch>

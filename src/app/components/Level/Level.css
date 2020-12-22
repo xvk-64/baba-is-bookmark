@@ -25,7 +25,7 @@
 }
 
 .level-header {
-	font-size: 12px;
+	font-size: 24px;
 }
 
 .level-body {
@@ -38,7 +38,7 @@
 }
 
 .level-author-container {
-	font-size: 10px;
+	font-size: 20px;
 
 	padding: 5px 10px 0px 10px;
 
@@ -51,7 +51,7 @@
 .level-author {
 	display: block;
 
-	width: 60%;
+	width: 68%;
 	margin: auto;
 }
 
@@ -84,10 +84,14 @@
 	width: 154px;
 }
 
+.level-thumbnail-centre {
+	margin:auto;
+}
+
 .level-description {
 	margin-left: 5px;
 
-	font-size: 9px;
+	font-size: 18px;
 	
 	height: 80px;
 	overflow-y: auto;
