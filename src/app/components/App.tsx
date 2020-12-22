@@ -8,6 +8,7 @@ import Error404 from './404'
 import './App.css'
 
 export default function Main() {
+
   return (
     <HashRouter>
       <Navbar />

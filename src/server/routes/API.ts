@@ -110,7 +110,7 @@ router.get("/level", async (request, response) => {
 	
 	let levelData = await getLevelData(levelCode)
 	
-	response.json(levelData)
+	response.json(levelData ? levelData : {notFound: true})
 })
 
 // Inserts leveldata into the database
@@ -143,7 +143,7 @@ router.post("/level", async(request, response) => {
 		levelData = await downloadLevelData(levelCode)
 	} catch(e) {
 		response.json({error: true, message: `Couldn't insert due to download error! Reason: ${e.message}`})
-		return;
+		return
 	}
 
 	// Insert into database
@@ -151,10 +151,19 @@ router.post("/level", async(request, response) => {
 		await insertLevelData(levelData)
 	} catch (e) {
 		response.json({error: true, message: `Couldn't insert due to database error! Reason: ${e.message}`})
-		return;
+		return
 	}
 
 	response.json({success: true, message: `Inserted level ${levelCode} successfully`})
+})
+
+
+router.get("/browse", async (request, response) => {
+	let result = await pool.query('SELECT * FROM levels ORDER BY timestamp DESC')
+	
+	let levelData: LevelData[] = result.rows
+
+	response.json(levelData)
 })
 
 export default router;
