@@ -1,8 +1,8 @@
 import React from 'react';
 
-import image from 'assets/img/sleepy.gif'
+import image from '@assets/img/sleepy.gif'
 
-import './404.css'
+import './styles/404.css'
 
 export default function Error404() {
 	return (

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import loadingImage from 'assets/img/loading.gif'
+import loadingImage from '@assets/img/loading.gif'
 
-import './LevelThumbnail.css'
+import './styles/LevelThumbnail.css'
 
 export interface ILevelThumbnailProps {
 	levelCode: string

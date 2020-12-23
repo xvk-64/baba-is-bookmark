@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import './LevelCode.css'
+import './styles/LevelCode.css'
 
 export declare interface ILevelCodeProps {
 	levelCode: string

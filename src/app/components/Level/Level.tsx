@@ -2,8 +2,8 @@ import React from 'react'
 
 import {LevelData} from "common/LevelData"
 
-import './Level.css'
-import 'assets/styles/icons.css'
+import './styles/Level.css'
+import '@assets/styles/icons.css'
 
 import LevelCode from "./LevelCode"
 import LevelDifficulty from "./LevelDifficulty"

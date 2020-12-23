@@ -1,5 +1,5 @@
-@import 'assets/fonts/Baba/Baba.css';
-@import 'assets/fonts/Bababig/Bababig.css';
+@import '@assets/fonts/Baba/Baba.css';
+@import '@assets/fonts/Bababig/Bababig.css';
 
 body {
   margin: 0;
@@ -66,19 +66,4 @@ body {
 .baba-text-input:focus {
   background-color: #eeeeee;
   border-color: #eeeeee;
-}
-
-.baba-select-input {
-  appearance: none;
-
-  padding: 5px;
-  padding-right: 20px;
-
-  background-image: url("../img/icons/dropdown-arrow.png");
-  background-repeat: no-repeat;
-  background-position: 100%, 0px;
-}
-
-.baba-select-input:focus:enabled {
-  background-color: #202850;
 }

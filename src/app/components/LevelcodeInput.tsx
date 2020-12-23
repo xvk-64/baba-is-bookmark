@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { getLevelData, LevelData } from 'common/LevelData'
 
-import './LevelcodeInput.css'
+import './styles/LevelcodeInput.css'
 
 function checkLevelCode(levelCode: string) {
 	return levelCode 

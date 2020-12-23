@@ -3,7 +3,7 @@ import Level from './Level'
 
 import {LevelData} from 'common/LevelData'
 
-import './LevelGallery.css'
+import './styles/LevelGallery.css'
 
 export declare interface ILevelGalleryProps {
 	levels: LevelData[];

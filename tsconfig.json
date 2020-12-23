@@ -13,7 +13,12 @@
       "es6"
     ],
     "baseUrl": "src",
-    "rootDir": "src"
+    "rootDir": "src",
+		"paths": {
+			"@components/*": [ "app/components/*" ],
+			"@routes/*": [ "app/components/routes/*" ],
+			"@assets/*": [ "app/assets/*" ]
+		}
   },
   "include": [
     "src/",

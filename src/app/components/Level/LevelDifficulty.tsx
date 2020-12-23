@@ -1,6 +1,6 @@
 import React from 'react'
 
-import './LevelDifficulty.css'
+import './styles/LevelDifficulty.css'
 
 export declare interface ILevelDifficultyProps {
 	levelDifficulty: number;

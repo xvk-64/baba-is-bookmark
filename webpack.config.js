@@ -2,6 +2,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require("webpack");
+const path = require("path");
 
 var mode = process.env.NODE_ENV || 'development';
 
@@ -33,6 +34,9 @@ module.exports = {
 		filename: 'static/[name].[contenthash].js'
 	},
 	resolve: {
+		alias: {
+			"@assets": path.resolve(__dirname, "src/app/assets")
+		},
 		extensions: ['.ts', '.tsx', '.js'],
 		plugins: [
 			new TsconfigPathsPlugin({

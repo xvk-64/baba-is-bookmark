@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 
-import LevelcodeInput from './LevelcodeInput'
-import Level from './Level/Level'
+import LevelcodeInput from '@components/LevelcodeInput'
+import Level from '@components/Level/Level'
 
-import './Add.css'
+import './styles/Add.css'
 import { LevelData } from "common/LevelData"
 
 let initialDisplayLevelData = {code: ""}

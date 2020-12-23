@@ -2,11 +2,11 @@ import React from 'react'
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import Navbar from './Navbar'
-import Browse from './Browse'
-import Add from './Add'
-import Error404 from './404'
+import Browse from './routes/Browse'
+import Add from './routes/Add'
+import Error404 from './routes/404'
 
-import './App.css'
+import './styles/App.css'
 
 export default function Main() {
 
