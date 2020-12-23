@@ -15,12 +15,14 @@ export default function Browse() {
 
 	return (
 		<>
+
+
 			<LevelGallery levels={levels} />
 		</>
 	)
 
 	async function fetchLevels() {
-		let result = await fetch("http://localhost:5000/api/browse")
+		let result = await fetch(process.env.API_URL + "/browse")
 
 		let json = await result.json()
 		let newLevels: LevelData[] = json.map(getLevelData)

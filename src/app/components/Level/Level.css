@@ -79,22 +79,14 @@
 	height: 80px;
 }
 
-.level-thumbnail {
-	height: 80px;
-	width: 154px;
-}
-
-.level-thumbnail-centre {
-	margin:auto;
-}
-
 .level-description {
 	margin-left: 5px;
 
 	font-size: 18px;
-	
-	height: 80px;
 	overflow-y: auto;
 	overflow-x: hidden;
 	word-break: break-word;
+	
+	height: 80px;
+	width: 180px;
 }

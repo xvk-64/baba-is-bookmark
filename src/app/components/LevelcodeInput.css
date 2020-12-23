@@ -14,9 +14,8 @@
 .levelcodeInput-input-container {
 }
 
-.levelcodeInput-input-error {
-	color: #ff5555;
-	font-size: 8px;
+.levelcodeInput-input-message {
+	font-size: 16px;
 	
 	height: 30px;
 }

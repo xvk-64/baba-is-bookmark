@@ -11,6 +11,7 @@ function checkLevelCode(levelCode: string) {
 
 export declare interface ILevelcodeInputProps {
 	onLevelData: (d: LevelData) => void
+	onSubmit: (code: string) => void
 }
 
 export default function LevelcodeInput(props: ILevelcodeInputProps) {
@@ -31,7 +32,6 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 			value = value.substr(0, 4) + "-" + value.substr(4, 4)
 		
 		e.target.defaultValue = value
-		e.target.value = value
 
 		setCode(value)
 	}
@@ -46,7 +46,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		}
 
 		// Check the database to see if the level already exists
-		let result = await fetch(`http://localhost:5000/api/level?code=${code}`)
+		let result = await fetch(process.env.API_URL + "/level?code=" + code)
 		let json = await result.json()
 
 		if (!json.notFound) {
@@ -56,7 +56,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		}
 
 		// Check if the level exists on the official server
-		result = await fetch(`http://localhost:5000/api/level:download?code=${code}`)
+		result = await fetch(process.env.API_URL + "/level/download?code=" + code)
 		json = await result.json()
 
 		if (json.error) {
@@ -69,10 +69,19 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		setValid(true)
 	}
 
+	function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault()
+
+		props.onSubmit(code)	
+	
+		setValid(false)
+		setCode("")
+	}
+
 	useEffect(() => { checkDatabase() }, [code])
 
 	return (
-		<form className="levelcodeInput-form"> 
+		<form className="levelcodeInput-form" onSubmit={onSubmit}> 
 			<div className="levelcodeInput-input-container">
 				<input onChange={onCodeChanged} 
 					type="text" 
@@ -81,12 +90,13 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 					placeholder="xxxx-xxxx"
 					// Hack to disable autofill on Chrome
 					onFocus={(e) => {e.target.autocomplete = "off"}}
+					value={code}
 					maxLength={9} 
 				/>
 				<input type="submit" className="baba-button" value="Submit" disabled={!valid}/>
 			</div>
 
-				<span className="levelcodeInput-input-error">
+				<span className="levelcodeInput-input-message error">
 					{code && error}
 				</span>
 		</form>

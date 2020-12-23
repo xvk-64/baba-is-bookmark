@@ -1,13 +1,11 @@
 import express from "express"
-import http from "http"
 import path from "path"
-import fs from "fs"
+import fs, { existsSync } from "fs"
 import fetch from "node-fetch"
 import {InputType, unzip} from "zlib"
 import { Pool } from 'pg';
 
 import {LevelData} from "common/LevelData"
-import LevelDifficulty from "app/components/Level/LevelDifficulty"
 
 const router = express.Router();
 
@@ -122,7 +120,7 @@ async function insertLevelData(levelData: LevelData) : Promise<LevelData> {
 }
 
 // Download level data for a code from the official server
-router.get("/level:download", async(request, response) => {
+router.get("/level/download", async(request, response) => {
 	let levelCode = request.query["code"] + ""
 
 	// Check formatting of levelcode
@@ -149,9 +147,57 @@ router.get("/level:download", async(request, response) => {
 	response.json(levelData)
 })
 
+async function getThumbnail(levelCode: string) {
+	let thumbnailsDir = path.join(process.env.TEMP + "", "thumbnails")
+
+	if (!existsSync(thumbnailsDir))
+		fs.mkdirSync(thumbnailsDir)
+
+	let filename = path.join(thumbnailsDir, levelCode + ".png")
+
+	// Check for thumbnail in cache
+	if (fs.existsSync(filename)) {
+		let buf = fs.readFileSync(filename)
+
+		return "data:image/png;base64," + buf.toString('base64')
+	}
+
+	// Need to download from level server
+	let result = await fetch(process.env.SERVER_URL + "/" + levelCode + ".png")
+
+	if (!result.ok)
+		return ""
+	
+	let buf = await result.buffer()
+
+	fs.writeFileSync(filename, buf)
+
+	return "data:image/png;base64," + buf.toString("base64")
+}
+
+// Download from official server/retreive thumbnail from cache
+router.get("/level/thumbnail", async(request, response) => {
+	let levelCode = request.query["code"] + ""
+
+	// Check formatting of levelcode
+	if (!checkLevelCode(levelCode)) {
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+
+	let result = await getThumbnail(levelCode)
+
+	if (!result) {
+		response.json({error: true, message: `Couldn't download!`})
+		return
+	}
+
+	response.json({success: true, data: result})
+})
+
 // Download level data for a code from the official server and insert it into the database
 router.post("/level", async(request, response) => {
-	let levelCode = request.query["code"] + ""
+	let levelCode = request.body.code
 
 	// Check formatting of levelcode
 	if (!checkLevelCode(levelCode)) {

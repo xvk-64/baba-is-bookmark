@@ -32,7 +32,13 @@ export default function LevelCode(props: ILevelCodeProps) {
 		return <></>
 
 	return (
-		<div style={props.style} className={props.showInCentre ? "levelCode-container levelCode-centre" : "levelCode-container"}>
+		<div 
+			style={props.style} 
+			className={props.showInCentre 
+				? "levelCode-container levelCode-centre" 
+				: "levelCode-container"}
+			title={props.levelCode}
+		>
 			<span onClick={copyToClipboard} className="levelCode levelCode-copyable">
 				{props.levelCode}
 			</span>

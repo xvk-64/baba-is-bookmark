@@ -1,6 +1,7 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HTMLWebpackPlugin = require('html-webpack-plugin')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const webpack = require("webpack");
 
 var mode = process.env.NODE_ENV || 'development';
 
@@ -15,7 +16,12 @@ module.exports = {
 			template: 'templates/index.html',
 			title: 'Baba Is Bookmark',
 			favicon: 'templates/favicon.ico'
-		})
+		}),
+		new webpack.DefinePlugin({
+			'process.env.API_URL': mode === "development"
+				? JSON.stringify('http://localhost:5000/api')
+				: JSON.stringify('https://baba-is-bookmark.herokuapp.com/api')
+		  })
 	],
 	devServer: mode === "development" ? {
 		contentBase: './dist/server/public',
