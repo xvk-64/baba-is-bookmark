@@ -1,0 +1,21 @@
+.browse-option-container {
+	display: flex;
+	flex-direction: column;
+	float:left;
+}
+
+.browse-option-header {
+	text-align: center;
+}
+
+.browse-option-searchbar {
+	
+}
+
+.browse-option {
+	margin: 20px 5px;
+}
+
+.browse-search-button {
+	margin: auto;
+}

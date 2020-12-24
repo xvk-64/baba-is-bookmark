@@ -13,9 +13,9 @@ export default function Navbar() {
 			</div>
 			<div className="navbar-bottom">
 				<div className="navbar-link-container">
-					<NavLink className="navbar-link" to="/featured">
+					{/* <NavLink className="navbar-link" to="/featured">
 						FEATURED LEVELS
-					</NavLink>
+					</NavLink> */}
 					<NavLink className="navbar-link" exact to="/">
 						BROWSE LEVELS
 					</NavLink>
@@ -24,6 +24,9 @@ export default function Navbar() {
 					</NavLink>
 				</div>
 			</div>
+			<span className="navbar-beta-message">
+				Now in beta!
+			</span>
 		</nav>
 	)
 }

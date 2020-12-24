@@ -99,14 +99,15 @@ export default function Level(props: ILevelProps) {
 					}
 				</div>
 				{
-					props.levelData.difficulty != undefined &&
-					<LevelDifficulty 
+					props.levelData.difficulty 
+					? <LevelDifficulty 
 						levelDifficulty={props.levelData.difficulty || 0} 
 					/>
+					: <></>
 				}
 			</div>
 			<LevelCode 
-				showInCentre={props.levelData.difficulty == undefined} 
+				showInCentre={!props.levelData.difficulty} 
 				style={{backgroundColor:footerColour}} 
 				levelCode={props.levelData.code} 
 			/>

@@ -1,12 +1,11 @@
-import React, { PropsWithChildren, PropsWithoutRef } from 'react'
-import Select, { OptionTypeBase, Styles } from 'react-select'
+import React from 'react'
+import Select, { Styles } from 'react-select'
 import * as SelectProps from 'react-select'
 import {IndicatorProps} from 'react-select'
 
 import dropdownIndicator from '@assets/img/icons/dropdown-arrow.png'
 import checkMark from '@assets/img/icons/check-mark.png'
 import crossMark from '@assets/img/icons/cross-mark.png'
-import { multiValueRemoveCSS } from "react-select/src/components/MultiValue"
 
 const selectStyles: Styles = {
 	
@@ -16,19 +15,21 @@ const selectStyles: Styles = {
 		border:"#4759B1 4px solid",
 		borderColor:"#4759B1",
 		transitionDuration:"revert",
-
-		backgroundImage: state.isMulti ? "" : `url(${dropdownIndicator})`,
-		backgroundRepeat: "no-repeat",
-		backgroundPosition: "100%, -5px",
-
-		width: state.selectProps.width,
-
-		cursor: state.isDisabled ? "not-allowed" : "",
-
+		
+		cursor: state.isDisabled ? "not-allowed" : "default",
+		
 		':hover': {
 			borderColor:"#4759B1",
 			backgroundColor:"#4759B1",
 		}
+	}),
+	container: (provided, state) => ({
+		...provided,
+		width: state.selectProps.width,
+	}),
+	valueContainer: (provided, state) => ({
+		...provided,
+		paddingRight: "2px"
 	}),
 	placeholder: (provided, state) => ({
 		...provided,
@@ -37,7 +38,7 @@ const selectStyles: Styles = {
 	menu: (provided, state) => ({
 		...provided,
 		backgroundColor:"#202850",
-		width: state.selectProps.width || "100%",
+		width: "100%",
 		zIndex: 5
 	}),
 	option: (provided, state) => ({
@@ -46,7 +47,7 @@ const selectStyles: Styles = {
 
 		backgroundImage: state.isSelected ? `url(${checkMark})` : "",
 		backgroundRepeat: "no-repeat",
-		backgroundPosition: "100% 5px",
+		backgroundPosition: "calc(100% - 5px) 5px",
 
 		cursor: state.isDisabled ? "not-allowed" : "pointer",
 

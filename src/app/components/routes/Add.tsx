@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import LevelcodeInput from '@components/LevelcodeInput'
+import LevelcodeInput from '@components/Inputs/LevelcodeInput'
 import Level from '@components/Level/Level'
 
 import './styles/Add.css'
@@ -23,7 +23,7 @@ export default function Add() {
 		setDisplayLevelData(levelData)
 	}
 
-	async function onSubmit(levelCode: string) {
+	async function handleSubmit(levelCode: string) {
 		console.log("Submitting level " + levelCode)
 
 		setInfo("Submitting level " + levelCode + "...")
@@ -65,7 +65,7 @@ export default function Add() {
 				<span className="success">{success}</span>
 				<span className="info">{info}</span>
 			</p>
-			<LevelcodeInput onLevelData={onLevelData} onSubmit={onSubmit}/>
+			<LevelcodeInput onLevelData={onLevelData} onSubmit={handleSubmit}/>
 			<Level levelData={displayLevelData}/>
 		</div>
 	)

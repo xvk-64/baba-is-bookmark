@@ -233,7 +233,23 @@ router.post("/level", async(request, response) => {
 
 // Get a list of levels dictated by search terms
 router.get("/browse", async (request, response) => {
-	let result = await pool.query('SELECT * FROM levels ORDER BY timestamp DESC')
+	let searchTerm: string = request.query["search"] + ""
+	let timeInterval: number = Number.parseInt(request.query["time"] + "")
+
+	timeInterval = Math.min(Math.max(timeInterval, 0), 30)
+
+	let result = await pool.query(
+		`SELECT * FROM levels
+		WHERE (
+			name ILIKE '%' || $1 || '%'
+			OR author ILIKE '%' || $1 || '%'
+			OR description ILIKE '%' || $1 || '%'
+		) AND (
+			$2 = 0
+			OR (now(), now() - interval '$2 day')
+				OVERLAPS (timestamp, timestamp - interval '1 day')
+		)`
+		, [searchTerm, timeInterval])
 	
 	let levelData: LevelData[] = result.rows
 

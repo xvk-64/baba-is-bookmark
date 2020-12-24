@@ -1,0 +1,57 @@
+.babaButton {
+	background-color: #202850;
+	border: #4759B1 4px solid;
+	border-radius: 5px;
+  
+	color: white;
+	font-family: "Baba";
+	font-size: 20px;
+  
+	outline: none;
+  }
+  
+  .babaButton:disabled {
+	background-color: #434343;
+	border-color: #737373;
+
+	cursor: not-allowed;
+  }
+  
+  .babaButton:hover:enabled {
+	background-color: #4759B1;
+  
+	cursor: pointer;
+  }
+  
+  .babaButton:active:enabled {
+	background-color: #202850;
+	border-color: #202850;
+  }
+  
+  .babaButton-square {
+	display: flex;
+	padding: 0;
+	align-items: center;
+  }
+  
+  .babaButton-square img {
+	margin: auto;
+  }
+  
+  .babaButton-square span {
+	margin: auto;
+	font-size: 24px;
+  }
+  
+  .babaButton-square-sm {
+	width: 32px;
+	height: 32px;
+  }
+  .babaButton-square-md {
+	width: 48px;
+	height: 48px;
+  }
+  .babaButton-square-lg {
+	width: 64px;
+	height: 64px;
+  }

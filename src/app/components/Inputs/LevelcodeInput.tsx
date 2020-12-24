@@ -1,6 +1,9 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { getLevelData, LevelData } from 'common/LevelData'
 
+import BabaButton from '@components/Inputs/BabaButton'
+import BabaTextInput from '@components/Inputs/BabaTextInput'
+
 import './styles/LevelcodeInput.css'
 
 function checkLevelCode(levelCode: string) {
@@ -69,7 +72,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		setValid(true)
 	}
 
-	function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault()
 
 		props.onSubmit(code)	
@@ -81,19 +84,16 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 	useEffect(() => { checkDatabase() }, [code])
 
 	return (
-		<form className="levelcodeInput-form" onSubmit={onSubmit}> 
+		<form className="levelcodeInput-form" onSubmit={handleSubmit}> 
 			<div className="levelcodeInput-input-container">
-				<input onChange={onCodeChanged} 
-					type="text" 
+				<BabaTextInput onChange={onCodeChanged} 
 					name="levelcode" 
-					className="baba-text-input levelcodeInput-input" 
+					className="levelcodeInput-input" 
 					placeholder="xxxx-xxxx"
-					// Hack to disable autofill on Chrome
-					onFocus={(e) => {e.target.autocomplete = "off"}}
 					value={code}
 					maxLength={9} 
 				/>
-				<input type="submit" className="baba-button" value="Submit" disabled={!valid}/>
+				<BabaButton disabled={!valid}>Submit</BabaButton>
 			</div>
 
 				<span className="levelcodeInput-input-message error">
