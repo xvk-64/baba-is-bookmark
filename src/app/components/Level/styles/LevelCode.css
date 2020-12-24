@@ -1,0 +1,38 @@
+.levelCode-container {
+	position: absolute;
+
+	width: 130px;
+
+	font-size: 24px;
+	text-align: center;
+
+	bottom: 0px;
+	right: 5px;
+
+	padding: 3px;
+	padding-bottom: 12px;
+
+	border-radius: 5px;
+
+	background-color: gray;
+}
+
+.levelCode-centre {
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.levelCode-copyable:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.levelCode-copyable:active {
+	color: lightgray;
+}
+
+.levelCode-description {
+	font-size: 10px;
+    font-family: Bababig;
+    margin-top: 2px;
+}

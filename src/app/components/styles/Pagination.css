@@ -1,0 +1,23 @@
+.pagination-container {
+	display: flex;
+}
+
+.pagination-button-container {
+	display:flex;
+	flex-direction: row;
+
+	margin: auto;
+	width: 300px;
+}
+
+.pagination-button {
+	margin: auto;
+}
+
+.pagination-page-status {
+	margin:auto;
+	width: 100px;
+	
+	font-size: 18px;
+	text-align: center;
+}

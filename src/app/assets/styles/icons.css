@@ -1,0 +1,16 @@
+.icon {
+	display: block;
+	background-size: cover;
+}
+
+.icon-difficulty-shaded {
+	background-image: url(@assets/img/icons/difficulty-shaded.png);
+    width: 18px;
+	height: 24px;
+}
+
+.icon-difficulty-hollow {
+	background-image: url(@assets/img/icons/difficulty-hollow.png);
+    width: 18px;
+	height: 24px;
+}

@@ -1,0 +1,17 @@
+@font-face {
+	font-family: 'Baba';
+	src: url("./Baba-Regular.ttf");
+	font-weight: 600;
+	filter: contrast(1);
+	font-synthesis: style weight;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Baba Mono';
+	src: url("./Baba-Mono.ttf");
+	font-weight: 600;
+	filter: contrast(1);
+	font-synthesis: style weight;
+	font-style: normal;
+}

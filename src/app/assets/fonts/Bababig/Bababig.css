@@ -1,0 +1,17 @@
+@font-face {
+	font-family: "Bababig";
+	src: url("./Bababig-Regular.ttf");
+	font-weight: 600;
+	filter: contrast(1);
+	font-synthesis: style weight;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "Bababig Mono";
+	src: url("./Bababig-Mono.ttf");
+	font-weight: 600;
+	filter: contrast(1);
+	font-synthesis: style weight;
+	font-style: normal;
+}

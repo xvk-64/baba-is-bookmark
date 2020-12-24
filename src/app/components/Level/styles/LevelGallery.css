@@ -1,0 +1,30 @@
+.levelGallery-gallery-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.levelGallery-gallery {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+
+	justify-content: center;
+
+	margin: auto;
+}
+
+.levelGallery-options {
+	display: flex;
+	flex-direction: row-reverse;
+	align-items: flex-start;
+}
+
+.levelGallery-loading {
+	margin: auto;
+}
+
+.levelGallery-noResults {
+	margin: auto;
+
+	text-align: center;
+}

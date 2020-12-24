@@ -12,10 +12,16 @@
       "DOM",
       "es6"
     ],
-    "rootDir": "src"
+    "baseUrl": "src",
+    "rootDir": "src",
+		"paths": {
+			"@components/*": [ "app/components/*" ],
+			"@routes/*": [ "app/components/routes/*" ],
+			"@assets/*": [ "app/assets/*" ]
+		}
   },
-  "compileOnSave": false,
   "include": [
-    "src"
-  ]
+    "src/",
+  ],
+  "compileOnSave": false
 }

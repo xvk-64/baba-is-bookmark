@@ -1,0 +1,16 @@
+.babaTextInput {
+	background-color: white;
+  
+	font-family: "Baba Mono";
+	font-size: 20px;
+  
+	border: white 4px solid;
+	border-radius: 5px;
+  
+	outline: none;
+  }
+  
+  .babaTextInput:focus {
+	background-color: #eeeeee;
+	border-color: #eeeeee;
+  }

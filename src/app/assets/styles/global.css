@@ -1,0 +1,25 @@
+@import '@assets/fonts/Baba/Baba.css';
+@import '@assets/fonts/Bababig/Bababig.css';
+
+body {
+  margin: 0;
+  font-family: "Baba", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.error {
+	color: #ff5555;
+}
+
+.success {
+  color: #99ee55;
+}
+
+.info {
+  color: #6699ff
+}
+
