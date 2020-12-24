@@ -24,11 +24,11 @@ module.exports = {
 				: JSON.stringify('https://baba-is-bookmark.herokuapp.com/api')
 		  })
 	],
-	devServer: mode === "development" ? {
+	devServer: {
 		contentBase: './dist/server/public',
 		compress: true,
 		port: 9000
-	} : false,
+	},
 	output: {
 		path: __dirname + '/dist/server/public',
 		filename: 'static/[name].[contenthash].js'
