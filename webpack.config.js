@@ -21,7 +21,8 @@ module.exports = {
 		new webpack.DefinePlugin({
 			'process.env.API_URL': mode === "development"
 				? JSON.stringify('http://localhost:5000/api')
-				: JSON.stringify('https://baba-is-bookmark.herokuapp.com/api')
+				: JSON.stringify('https://baba-is-bookmark.herokuapp.com/api'),
+			'process.env.IS_PRODUCTION': mode !== "development"
 		  })
 	],
 	devServer: {

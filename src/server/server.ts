@@ -13,6 +13,11 @@ const app = express()
 console.log(`Setting port to ${APP_PORT}`)
 app.set('port', APP_PORT)
 
+if (process.env.IS_PRODUCTION)
+	console.log("Starting in production environment")
+else
+	console.log("Starting in development environment")
+
 app.use(cors())
 
 app.use("/", express.static(path.join(__dirname, "public")))
