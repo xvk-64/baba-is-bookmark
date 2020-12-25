@@ -7,6 +7,10 @@ import { Pool } from 'pg';
 
 import {LevelData} from "common/LevelData"
 
+const tempDir = path.join(__dirname, "temp")
+if (!fs.existsSync(tempDir))
+	fs.mkdirSync(tempDir)
+
 const router = express.Router();
 
 router.use(express.json())
@@ -148,7 +152,7 @@ router.get("/level/download", async(request, response) => {
 })
 
 async function getThumbnail(levelCode: string) {
-	let thumbnailsDir = path.join(process.env.TEMP + "", "thumbnails")
+	let thumbnailsDir = path.join(tempDir, "thumbnails")
 
 	if (!existsSync(thumbnailsDir))
 		fs.mkdirSync(thumbnailsDir)
