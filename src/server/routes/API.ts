@@ -13,9 +13,7 @@ router.use(express.json())
 
 const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
-	// ssl: process.env.IS_PRODUCTION ? { rejectUnauthorized: false } : false
-	// Disabling ssl until I can figure out why it doesn't work
-	ssl: false
+	ssl: (process.env.IS_PRODUCTION ? { rejectUnauthorized: false } : false)
 });
 
 
