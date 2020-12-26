@@ -293,20 +293,63 @@ router.post("/level", async(request, response) => {
 
 // Get a list of levels dictated by search terms
 router.get("/browse", async (request, response) => {
-	if (request.query["search"] === undefined || request.query["time"] === undefined) {
+	if (request.query["search"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"search\" and \"time\" fields on request query!"})
+		response.json({error: true, message: "Missing \"search\" field on request query!"})
+		return
+	}
+
+	let before: Date = new Date()
+	let after: Date = new Date()
+
+	if (request.query["time"] === undefined) {
+		if (request.query["after"] === undefined) {
+			response.statusCode = 400
+			response.json({error: true, message: "Missing \"time\" or \"after\" fields on request query!"})
+			return
+		} else {
+			after = new Date(request.query["after"] + "")
+
+			if (isNaN(after.getTime())) {
+				response.statusCode = 400
+				response.json({error: true, message: "\"after\" field on request query is not formatted correctly!"})
+				return
+			}
+
+			if (request.query["before"] !== undefined) {
+				before = new Date(request.query["before"] + "")
+
+				if (isNaN(after.getTime())) {
+					response.statusCode = 400
+					response.json({error: true, message: "\"before\" field on request query is not formatted correctly!"})
+					return
+				}
+			}
+		}
+	} else {
+		let timeInterval: number = Number.parseInt(request.query["time"] + "")
+
+		if (isNaN(timeInterval) || timeInterval < 0)
+			timeInterval = 7
+	
+		if (timeInterval > 30)
+			timeInterval = 30
+
+		after.setDate(after.getDate() - timeInterval)
+
+		if (timeInterval == 0) {
+			after = new Date(0)
+		}
+	}
+
+	if (before < after) {
+		response.statusCode = 400
+		response.json({error: true, message: "\"before\" field must be a date that is more recent than \"after\"!"})
 		return
 	}
 
 	let searchTerm: string = request.query["search"] + ""
-	let timeInterval: number = Number.parseFloat(request.query["time"] + "")
 
-	if (isNaN(timeInterval) || timeInterval < 0)
-		timeInterval = 7
-
-	if (timeInterval > 30)
-		timeInterval = 30
 
 	let result = await pool.query(
 		`SELECT * FROM levels
@@ -315,11 +358,10 @@ router.get("/browse", async (request, response) => {
 			OR author ILIKE '%' || $1 || '%'
 			OR description ILIKE '%' || $1 || '%'
 		) AND (
-			$2 = 0
-			OR (now(), now() - interval '$2 day')
-				OVERLAPS (timestamp, timestamp - interval '1 day')
+			($2, $3)
+			OVERLAPS (timestamp, timestamp - interval '1 day')
 		)`
-		, [searchTerm, timeInterval])
+		, [searchTerm, before, after])
 	
 	let levelData: LevelData[] = result.rows
 
