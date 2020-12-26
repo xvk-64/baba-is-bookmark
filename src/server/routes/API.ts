@@ -65,16 +65,12 @@ async function downloadAndDecode(fileName: string) {
 		throw Error("Server did not return response code 200 OK!")
 	}
 
-	await new Promise((resolve, reject) => {
-        const file = fs.createWriteStream(destination);
-        res.body.pipe(file);
-        res.body.on("end", resolve);
-        file.on("error", reject);
-	  })
-
+	
 	let buf = await res.buffer()
-
+	
 	let decoded = await unzipBuffer(buf)
+
+	fs.writeFileSync(destination, decoded)
 
 	return decoded
 }
