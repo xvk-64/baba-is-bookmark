@@ -240,7 +240,11 @@ router.get("/browse", async (request, response) => {
 	let searchTerm: string = request.query["search"] + ""
 	let timeInterval: number = Number.parseInt(request.query["time"] + "")
 
-	timeInterval = Math.min(Math.max(timeInterval, 0), 30)
+	if (isNaN(timeInterval) || timeInterval < 0)
+		timeInterval = 7
+
+	if (timeInterval > 30)
+		timeInterval = 30
 
 	let result = await pool.query(
 		`SELECT * FROM levels
