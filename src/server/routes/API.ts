@@ -45,20 +45,41 @@ function checkLevelCode(levelCode: string) {
 		&& levelCode[4] == "-"
 }
 
-// Downloads level data from the official server
-async function downloadLevelData(levelCode: string) {
-	let target = process.env.SERVER_URL + "/" + levelCode + ".ld"
+// Download and decode a file to a buffer from the official server
+async function downloadAndDecode(fileName: string) {
+	let downloadsDir = path.join(tempDir, "download")
+	if (!fs.existsSync(downloadsDir))
+		fs.mkdirSync(downloadsDir)
 
-	console.log(`Downloading level ${levelCode} from ${target}`)
+	let destination = path.join(downloadsDir, fileName)
+
+	if (fs.existsSync(destination)) {
+		return fs.readFileSync(destination)
+	}
+
+	let target = process.env.SERVER_URL + "/" + fileName
 
 	let res = await fetch(target)
 
-	if (!res.ok)
-		throw new Error("Server did not return response code 200 OK!")
+	if (!res.ok) {
+		throw Error("Server did not return response code 200 OK!")
+	}
 
-	let buffer = await res.arrayBuffer()
+	
+	let buf = await res.buffer()
+	
+	let decoded = await unzipBuffer(buf)
 
-	let result = await unzipBuffer(buffer)
+	fs.writeFileSync(destination, decoded)
+
+	return decoded
+}
+
+// Downloads level data from the official server
+async function downloadLevelData(levelCode: string) {
+	let download = downloadAndDecode(levelCode + ".ld")
+
+	let result = await download
 
 	return await parseLevelData(levelCode, result);
 
@@ -101,55 +122,14 @@ async function getLevelData(levelCode: string) : Promise<LevelData> {
 	return result.rows[0]
 }
 
-// Get level data for a code from the database
-router.get("/level", async (request, response) => {
-	let levelCode = request.query["code"] + ""
-	
-	if (!checkLevelCode(levelCode)) {
-		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
-		return
-	}
-	
-	let levelData = await getLevelData(levelCode)
-	
-	response.json(levelData ? levelData : {notFound: true})
-})
-
 // Inserts leveldata into the database
 async function insertLevelData(levelData: LevelData) : Promise<LevelData> {
 	let result = await pool.query('INSERT INTO levels(code, name, author, timestamp, difficulty, description) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
-		, [levelData.code, levelData.name, levelData.author, levelData.timestamp, levelData.difficulty, levelData.description])
-
+	, [levelData.code, levelData.name, levelData.author, levelData.timestamp, levelData.difficulty, levelData.description])
+	
 	return result.rows[0]
 }
 
-// Download level data for a code from the official server
-router.get("/level/download", async(request, response) => {
-	let levelCode = request.query["code"] + ""
-
-	// Check formatting of levelcode
-	if (!checkLevelCode(levelCode)) {
-		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
-		return
-	}
-
-	// Check if level is already in database
-	if (await getLevelData(levelCode)) {
-		response.json({error: true, message: `Couldn't download due to database error! Reason: Level already exists in database!`})
-		return
-	}
-
-	// Try and download from the server
-	let levelData
-	try {
-		levelData = await downloadLevelData(levelCode)
-	} catch(e) {
-		response.json({error: true, message: `Couldn't download! Reason: ${e.message}`})
-		return
-	}
-
-	response.json(levelData)
-})
 
 async function getThumbnail(levelCode: string) {
 	let thumbnailsDir = path.join(tempDir, "thumbnails")
@@ -179,12 +159,77 @@ async function getThumbnail(levelCode: string) {
 	return "data:image/png;base64," + buf.toString("base64")
 }
 
-// Download from official server/retreive thumbnail from cache
-router.get("/level/thumbnail", async(request, response) => {
+// Get level data for a code from the database
+router.get("/level", async (request, response) => {
+	if (request.query["code"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		return
+	}
+
+	let levelCode = request.query["code"] + ""
+	
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+	
+	let levelData = await getLevelData(levelCode)
+	
+	response.json(levelData ? levelData : {notFound: true})
+})
+
+// Download level data for a code from the official server
+router.get("/level/download", async(request, response) => {
+	if (request.query["code"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		return
+	}
+
 	let levelCode = request.query["code"] + ""
 
 	// Check formatting of levelcode
 	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+
+	// Check if level is already in database
+	if (await getLevelData(levelCode)) {
+		response.statusCode = 500
+		response.json({error: true, message: `Couldn't download due to database error! Reason: Level already exists in database!`})
+		return
+	}
+
+	// Try and download from the server
+	let download = downloadLevelData(levelCode)
+	download.catch(e => {
+		response.statusCode = 500
+		response.json({error: true, message: `Couldn't download! Reason: ${e.message}`})
+		return
+	})
+
+	let levelData = await download
+
+	response.json(levelData)
+})
+
+// Download from official server/retreive thumbnail from cache
+router.get("/level/thumbnail", async(request, response) => {
+	if (request.query["code"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		return
+	}
+
+	let levelCode = request.query["code"] + ""
+
+	// Check formatting of levelcode
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
 		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
 		return
 	}
@@ -192,6 +237,7 @@ router.get("/level/thumbnail", async(request, response) => {
 	let result = await getThumbnail(levelCode)
 
 	if (!result) {
+		response.statusCode = 500
 		response.json({error: true, message: `Couldn't download!`})
 		return
 	}
@@ -201,44 +247,60 @@ router.get("/level/thumbnail", async(request, response) => {
 
 // Download level data for a code from the official server and insert it into the database
 router.post("/level", async(request, response) => {
+	if (request.body.code === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request body!"})
+		return
+	}
+	
 	let levelCode = request.body.code
 
 	// Check formatting of levelcode
 	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 500
 		response.json({error: true, message: `Couldn't insert due to download error! Reason: Incorrect levelcode formatting!`})
 		return
 	}
 
 	// Check if level is already in database
 	if (await getLevelData(levelCode)) {
+		response.statusCode = 500
 		response.json({error: true, message: `Couldn't insert due to database error! Reason: Level already exists in database!`})
 		return
 	}
 
 	// Try and download from the server
-	let levelData
-	try {
-		levelData = await downloadLevelData(levelCode)
-	} catch(e) {
+	let download = downloadLevelData(levelCode)
+	download.catch(e => {
+		response.statusCode = 500
 		response.json({error: true, message: `Couldn't insert due to download error! Reason: ${e.message}`})
 		return
-	}
+	})
+
+	let levelData = await download
+		
 
 	// Insert into database
-	try {
-		await insertLevelData(levelData)
-	} catch (e) {
-		response.json({error: true, message: `Couldn't insert due to database error! Reason: ${e.message}`})
-		return
-	}
+	await insertLevelData(levelData)
+		.catch(e => {
+			response.statusCode = 500
+			response.json({error: true, message: `Couldn't insert due to database error! Reason: ${e.message}`})
+			return
+		})
 
 	response.json({success: true, message: `Inserted level ${levelCode} successfully`})
 })
 
 // Get a list of levels dictated by search terms
 router.get("/browse", async (request, response) => {
+	if (request.query["search"] === undefined || request.query["time"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"search\" and \"time\" fields on request query!"})
+		return
+	}
+
 	let searchTerm: string = request.query["search"] + ""
-	let timeInterval: number = Number.parseInt(request.query["time"] + "")
+	let timeInterval: number = Number.parseFloat(request.query["time"] + "")
 
 	if (isNaN(timeInterval) || timeInterval < 0)
 		timeInterval = 7
@@ -262,6 +324,61 @@ router.get("/browse", async (request, response) => {
 	let levelData: LevelData[] = result.rows
 
 	response.json(levelData)
+})
+
+router.get("/raw/ld", async(request, response) => {
+	if (request.query["code"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		return
+	}
+
+	let levelCode = request.query["code"] + ""
+	
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+
+	let download = downloadAndDecode(levelCode + ".ld")
+	
+	download.catch(e => {
+			response.statusCode = 500
+			response.json({error: true, message: `Server error: ${e.message}`})
+			return
+		})
+
+	let buf = <Buffer>await download
+
+	response.json({success: true, data: buf.toString()})
+})
+
+router.get("/raw/l", async(request, response) => {
+	if (request.query["code"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		return
+	}
+
+	let levelCode = request.query["code"] + ""
+
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+	
+	let download = downloadAndDecode(levelCode + ".l")
+	download.catch(e => {
+			response.statusCode = 500
+			response.json({error: true, message: `Server error: ${e.message}`})
+			return
+		})
+
+	let buf = <Buffer>await download
+
+	response.json({success: true, data: buf.toString('base64')})
 })
 
 export default router;
