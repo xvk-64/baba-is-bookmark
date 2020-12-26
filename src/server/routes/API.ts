@@ -293,7 +293,7 @@ router.post("/level", async(request, response) => {
 
 // Get a list of levels dictated by search terms
 router.get("/browse", async (request, response) => {
-	if (request.query["code"] === undefined || request.query["time"] === undefined) {
+	if (request.query["search"] === undefined || request.query["time"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"search\" and \"time\" fields on request query!"})
 		return
@@ -351,7 +351,7 @@ router.get("/raw/ld", async(request, response) => {
 })
 
 router.get("/raw/l", async(request, response) => {
-	if (!request.query["code"]) {
+	if (request.query["code"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"code\" field on request query!"})
 		return
