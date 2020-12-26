@@ -318,6 +318,12 @@ router.get("/raw/ld", async(request, response) => {
 
 	let levelCode = request.query["code"] + ""
 	
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
+
 	let download = downloadAndDecode(levelCode + ".ld")
 		.catch(e => {
 			response.statusCode = 500
@@ -338,6 +344,12 @@ router.get("/raw/l", async(request, response) => {
 	}
 
 	let levelCode = request.query["code"] + ""
+
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Couldn't download! Reason: Incorrect levelcode formatting!`})
+		return
+	}
 	
 	let download = downloadAndDecode(levelCode + ".l")
 		.catch(e => {
