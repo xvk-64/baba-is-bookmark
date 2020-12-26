@@ -161,7 +161,7 @@ async function getThumbnail(levelCode: string) {
 
 // Get level data for a code from the database
 router.get("/level", async (request, response) => {
-	if (!request.query["code"]) {
+	if (request.query["code"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"code\" field on request query!"})
 		return
@@ -182,7 +182,7 @@ router.get("/level", async (request, response) => {
 
 // Download level data for a code from the official server
 router.get("/level/download", async(request, response) => {
-	if (!request.query["code"]) {
+	if (request.query["code"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"code\" field on request query!"})
 		return
@@ -219,7 +219,7 @@ router.get("/level/download", async(request, response) => {
 
 // Download from official server/retreive thumbnail from cache
 router.get("/level/thumbnail", async(request, response) => {
-	if (!request.query["code"]) {
+	if (request.query["code"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"code\" field on request query!"})
 		return
@@ -247,7 +247,7 @@ router.get("/level/thumbnail", async(request, response) => {
 
 // Download level data for a code from the official server and insert it into the database
 router.post("/level", async(request, response) => {
-	if (!request.body.code) {
+	if (request.body.code === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"code\" field on request body!"})
 		return
@@ -300,7 +300,7 @@ router.get("/browse", async (request, response) => {
 	}
 
 	let searchTerm: string = request.query["search"] + ""
-	let timeInterval: number = Number.parseInt(request.query["time"] + "")
+	let timeInterval: number = Number.parseFloat(request.query["time"] + "")
 
 	timeInterval = Math.min(Math.max(timeInterval, 0), 30)
 
