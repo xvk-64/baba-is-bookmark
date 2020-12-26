@@ -47,6 +47,16 @@ function checkLevelCode(levelCode: string) {
 
 // Download and decode a file to a buffer from the official server
 async function downloadAndDecode(fileName: string) {
+	let downloadsDir = path.join(tempDir, "download")
+	if (!fs.existsSync(downloadsDir))
+		fs.mkdirSync(downloadsDir)
+
+	let destination = path.join(downloadsDir, fileName)
+
+	if (fs.existsSync(destination)) {
+		return fs.readFileSync(destination)
+	}
+
 	let target = process.env.SERVER_URL + "/" + fileName
 
 	let res = await fetch(target)
@@ -54,6 +64,13 @@ async function downloadAndDecode(fileName: string) {
 	if (!res.ok) {
 		throw Error("Server did not return response code 200 OK!")
 	}
+
+	await new Promise((resolve, reject) => {
+        const file = fs.createWriteStream(destination);
+        res.body.pipe(file);
+        res.body.on("end", resolve);
+        file.on("error", reject);
+	  })
 
 	let buf = await res.buffer()
 
@@ -280,7 +297,7 @@ router.post("/level", async(request, response) => {
 
 // Get a list of levels dictated by search terms
 router.get("/browse", async (request, response) => {
-	if (!request.query["search"] || !request.query["time"]) {
+	if (request.query["code"] === undefined || request.query["time"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"search\" and \"time\" fields on request query!"})
 		return
@@ -310,7 +327,7 @@ router.get("/browse", async (request, response) => {
 })
 
 router.get("/raw/ld", async(request, response) => {
-	if (!request.query["code"]) {
+	if (request.query["code"] === undefined) {
 		response.statusCode = 400
 		response.json({error: true, message: "Missing \"code\" field on request query!"})
 		return
@@ -325,7 +342,8 @@ router.get("/raw/ld", async(request, response) => {
 	}
 
 	let download = downloadAndDecode(levelCode + ".ld")
-		.catch(e => {
+	
+	download.catch(e => {
 			response.statusCode = 500
 			response.json({error: true, message: `Server error: ${e.message}`})
 			return
@@ -352,7 +370,7 @@ router.get("/raw/l", async(request, response) => {
 	}
 	
 	let download = downloadAndDecode(levelCode + ".l")
-		.catch(e => {
+	download.catch(e => {
 			response.statusCode = 500
 			response.json({error: true, message: `Server error: ${e.message}`})
 			return
