@@ -48,6 +48,8 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 			return
 		}
 
+		props.onLevelData({code: "", name: "Loading..."})
+
 		// Check the database to see if the level already exists
 		let result = await fetch(process.env.API_URL + "/level?code=" + code)
 		let json = await result.json()
@@ -63,6 +65,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		json = await result.json()
 
 		if (json.error) {
+			props.onLevelData({code: ""})
 			setError("Level does not exist!")
 			return
 		}

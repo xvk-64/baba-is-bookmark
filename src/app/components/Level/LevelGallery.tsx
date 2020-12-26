@@ -32,7 +32,7 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 
 	let [currentPage, setCurrentPage] = useState(1)
 
-	let [sortingMethod, setSortingMethod] = useState(defaultSortingOption.value)
+	let [sortingMethod, setSortingMethod] = useState(defaultSortingOption)
 
 	let [sortedLevels, setSortedLevels] = useState(props.levels)
 
@@ -43,13 +43,13 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 	}
 
 	let handleSortingValueChange = (newValue: any) => {
-		setSortingMethod(newValue.value)
+		setSortingMethod(newValue)
 	}
 
 	let sortLevels = () => {
 		let sorted: LevelData[] = []
 	
-		switch (sortingMethod) {
+		switch (sortingMethod.value) {
 			case 'timeAsc':
 				sorted = props.levels.sort((a, b) => (a.timestamp && b.timestamp) && a.timestamp < b.timestamp ? 1 : -1)
 				break;
@@ -108,9 +108,9 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 			<div className="levelGallery-options">
 				<BabaSelect 
 					options={sortingOptions}
-					defaultValue={defaultSortingOption}
 					isSearchable={false}
 					width="180px"
+					value={sortingMethod}
 					onChange={(newValue) => handleSortingValueChange(newValue)}
 				/>
 			</div>
