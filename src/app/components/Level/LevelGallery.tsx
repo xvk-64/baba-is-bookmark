@@ -74,6 +74,7 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 	}
 
 	useEffect(() => {
+		setCurrentPage(1)
 		sortLevels()
 	}, [props.levels, sortingMethod])
 
@@ -88,7 +89,7 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 			</div>
 		)
 
-	if (levelsOnCurrentPage.length == 0)
+	if (currentPage == 1 && levelsOnCurrentPage.length == 0)
 		return (
 			<div className="levelGallery">
 				<div className="levelGallery-gallery">
