@@ -44,7 +44,13 @@ export default function Browse() {
 		let result = await fetch(process.env.API_URL + "/browse?"+querystring.stringify(queryObj))
 
 		let json = await result.json()
-		let newLevels: LevelData[] = json.map(getLevelData)
+
+		if (json.error) {
+			console.log(json.message)
+			return
+		}
+
+		let newLevels: LevelData[] = json.data.map(getLevelData)
 
 		setLevels(newLevels)
 		setIsLoading(false)

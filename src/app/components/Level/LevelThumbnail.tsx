@@ -16,13 +16,13 @@ export default function LevelThumbnail(props: ILevelThumbnailProps) {
 
 	return (
 		<img 
-		src={img} 
-		className="levelThumbnail-thumbnail"
+			src={img} 
+			className="levelThumbnail-thumbnail"
 		/>
 	)
 
 	async function loadThumbnail() {
-		let result = await fetch(process.env.API_URL + "/level/thumbnail?code=" + props.levelCode)
+		let result = await fetch(process.env.API_URL + "/level/thumbnail/?code=" + props.levelCode)
 
 		let json = await result.json()
 		
