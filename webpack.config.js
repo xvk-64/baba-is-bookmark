@@ -89,6 +89,18 @@ module.exports = {
 					},
 				],
 			},
+			{
+				test: /\.md$/,
+				use: [
+					{
+						loader: "file-loader",
+						options: {
+							name: "[name].[contenthash].[ext]",
+							outputPath: "static/markdown/",
+						},
+					},
+				],
+			},
 		]
 	}
 }

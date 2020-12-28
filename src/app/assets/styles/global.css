@@ -9,6 +9,7 @@ body {
   color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.2em;
 }
 
 .error {
@@ -23,3 +24,16 @@ body {
   color: #6699ff
 }
 
+a {
+	color: #D9396A
+}
+
+ul li {
+  margin: 10px
+}
+
+.pageHeader {
+  display: block;
+  
+  text-align: center;
+}

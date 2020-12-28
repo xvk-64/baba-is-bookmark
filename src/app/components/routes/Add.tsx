@@ -54,9 +54,9 @@ export default function Add() {
 
 	return (
 		<div className="add-container">
-			<h1>
-				Add Levels
-			</h1>
+			<h2 className="pageHeader">
+				Submit Levels
+			</h2>
 			<p>
 				Enter the level code of an uploaded level below to add it to Baba Is Bookmark.
 			</p>
