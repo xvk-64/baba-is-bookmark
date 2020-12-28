@@ -8,8 +8,7 @@ import './styles/LevelcodeInput.css'
 
 function checkLevelCode(levelCode: string) {
 	return levelCode 
-		&& levelCode.length == 9
-		&& levelCode[4] == "-"
+		&& /^[A-Z0-9]{4}\-[A-Z0-9]{4}$/.test(levelCode)
 }
 
 export declare interface ILevelcodeInputProps {
@@ -51,17 +50,26 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		props.onLevelData({code: "", name: "Loading..."})
 
 		// Check the database to see if the level already exists
-		let result = await fetch(process.env.API_URL + "/level?code=" + code)
+		let result = await fetch(process.env.API_URL + "/level/?code=" + code)
+		
 		let json = await result.json()
 
-		if (!json.notFound) {
+		if (json.success) {
 			setError("Database already contains level!")
-			props.onLevelData(getLevelData(json))
+			props.onLevelData(getLevelData(json.data))
 			return
+		} else if (json.error) {
+			// Some other error
+			if (!json.notFound) {
+				// Notfound is acceptable since we want the level to not exist yet
+				console.log(json.message)
+				setError("An internal server error occured! Please try again.")
+				return
+			}
 		}
 
 		// Check if the level exists on the official server
-		result = await fetch(process.env.API_URL + "/level/download?code=" + code)
+		result = await fetch(process.env.API_URL + "/level/download/?code=" + code)
 		json = await result.json()
 
 		if (json.error) {
@@ -70,7 +78,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 			return
 		}
 
-		props.onLevelData(getLevelData(json))
+		props.onLevelData(getLevelData(json.data))
 
 		setValid(true)
 	}

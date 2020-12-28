@@ -44,19 +44,20 @@ export default function Add() {
 
 		setInfo("")
 
-		if (json.success) {
-			setSuccess("Successfully submitted level!")
-		} else {
-			console.log(json)
+		if (json.error) {
+			console.log(json.message)
 			setError("An error occurred!")
+			return
 		}
+
+		setSuccess("Successfully submitted level!")
 	}
 
 	return (
 		<div className="add-container">
-			<h1>
-				Add Levels
-			</h1>
+			<h2 className="pageHeader">
+				Submit Levels
+			</h2>
 			<p>
 				Enter the level code of an uploaded level below to add it to Baba Is Bookmark.
 			</p>

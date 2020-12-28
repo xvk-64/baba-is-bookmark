@@ -20,9 +20,10 @@
 .navbar-logo {
 	font-family: 'Bababig';
 	font-size: 48px;
-	margin: auto;
+	color: white;
+	text-decoration: none;
 	
-	cursor: default;
+	margin: auto;
 }
 
 .navbar-bottom {
@@ -32,6 +33,15 @@
 
 	display: flex;
 	align-items: center;
+}
+
+.navbar-link-container {
+	display: flex;
+	align-items: center;
+
+	margin:auto;
+
+	width: 1000px;
 }
 
 .navbar-link {
@@ -45,15 +55,9 @@
 }
 
 .navbar-link:hover {
-	text-decoration: underline;
 	color: lightgray;
 }
 
-.navbar-link-container {
-	display: flex;
-	align-items: center;
-
-	margin:auto;
-
-	width: 1000px;
+.navbar-link-active {
+	text-decoration: underline;
 }
