@@ -11,9 +11,11 @@ import Sleepy from '@assets/img/sleepy.gif'
 import './styles/LevelGallery.css'
 
 export declare interface ILevelGalleryProps {
-	levels: LevelData[];
+	levels: LevelData[]
 
 	isLoading?: boolean
+
+	displayOptions?: boolean
 }
 
 const levelsPerPage = 24;
@@ -106,15 +108,20 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 	return (
 		<div className="levelGallery">
 			<Pagination currentPage={currentPage} numPages={numPages} onChange={handleCurrentPageChange}/>
-			<div className="levelGallery-options">
-				<BabaSelect 
-					options={sortingOptions}
-					isSearchable={false}
-					width="180px"
-					value={sortingMethod}
-					onChange={(newValue) => handleSortingValueChange(newValue)}
-				/>
-			</div>
+			{
+				(props.displayOptions !== false) ? (
+					<div className="levelGallery-options">
+						<BabaSelect 
+							options={sortingOptions}
+							isSearchable={false}
+							width="180px"
+							value={sortingMethod}
+							onChange={(newValue) => handleSortingValueChange(newValue)}
+						/>
+					</div>
+				)
+				: ""
+			}
 
 			<div className="levelGallery-gallery-container">
 				<div className="levelGallery-gallery">

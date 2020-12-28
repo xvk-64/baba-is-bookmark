@@ -7,20 +7,20 @@ export default function Navbar() {
 	return (
 		<nav className="navbar">
 			<div className="navbar-top">
-				<span className="navbar-logo">
+				<NavLink exact to="/" className="navbar-logo">
 					<span style={{color: "#DE396B"}}>BABA</span> IS <span style={{color: "#DE396B"}}>BOOKMARK</span>
-				</span>
+				</NavLink>
 			</div>
 			<div className="navbar-bottom">
 				<div className="navbar-link-container">
 					{/* <NavLink className="navbar-link" to="/featured">
 						FEATURED LEVELS
 					</NavLink> */}
-					<NavLink className="navbar-link" exact to="/">
-						BROWSE LEVELS
+					<NavLink activeClassName="navbar-link-active" className="navbar-link" to="/browse">
+						Level browser
 					</NavLink>
-					<NavLink className="navbar-link" to="/add">
-						ADD LEVELS
+					<NavLink activeClassName="navbar-link-active" className="navbar-link" to="/add">
+						Submit levels
 					</NavLink>
 				</div>
 			</div>

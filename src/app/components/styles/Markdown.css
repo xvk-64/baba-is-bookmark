@@ -1,0 +1,23 @@
+.markdown-container {
+	font-family: Segoe UI,SegoeUI,Helvetica Neue,Helvetica,Arial,sans-serif;
+}
+
+.markdown-styles {
+	line-height: 1.2em;
+	font-family: Baba;
+}
+
+.markdown-styles h2 {
+	color: #9183D7;
+}
+.markdown-styles h3 {
+	color: #83C8E5;
+}
+
+.markdown-styles img {
+	max-width: 750px;
+}
+
+.markdown-styles code {
+	font-family: "Bababig Mono";
+}

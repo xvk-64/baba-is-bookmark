@@ -1,0 +1,16 @@
+.home-logo-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	padding: 10px;
+}
+
+.home-logo {
+	margin: auto;
+	width: 500px;
+}
+
+.home-section {
+	text-align: center;
+}
