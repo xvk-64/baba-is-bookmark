@@ -44,12 +44,13 @@ export default function Add() {
 
 		setInfo("")
 
-		if (json.success) {
-			setSuccess("Successfully submitted level!")
-		} else {
-			console.log(json)
+		if (json.error) {
+			console.log(json.message)
 			setError("An error occurred!")
+			return
 		}
+
+		setSuccess("Successfully submitted level!")
 	}
 
 	return (
