@@ -39,4 +39,16 @@ All other responses are objects of the form `{success:true, data:...}`
 |GET|/level/raw/ld|code|Returns level's .ld file||
 |GET|/level/raw/l|code|Returns level's .l file|Since a .l file is a binary blob, the response is encoded in Base64|
 |GET|/browse/|search, (time \| ([before], after))|Returns a list of LevelData, dictated by "search" and between "before" and "after", or since "time" days ago.|Refrain from using this endpoint extensively, since it can be computationally expensive.|
-|
+
+## `levelData` objects
+
+Fields prefixed with `?` are optional (potentially missing), and types suffixed with `?` are nullable (potentially null).
+
+|Field|Type|Description|Notes|
+|:---:|:--:|:---------:|:---:|
+|`code`|string|The level code for the level||
+|`name`|string|The name of the level|Some older level names may be suffixed with `\r` due to a bug with newline handling|
+|`author`|string?|The level author|This *can* be set to an arbitrary string, so shouldn't be treated as proof of identity|
+|`timestamp`|string|The time the level was uploaded, as a naive ISO 8601 datetime|The time the level was uploaded to this API, not the official server|
+|`description`|string?|An optional level description||
+|`difficulty`|int?|The level difficulty, between 0 and 10 inclusive.||
