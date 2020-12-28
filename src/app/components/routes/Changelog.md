@@ -1,4 +1,4 @@
-## v0.4.0 - <DATE>
+## v0.4.0b - 29th December, 2020
 ### New features and changes
 - Added two new colours for levels: Navy & Maroon.
 - Removed Silver colour since it looked too similar to the colours used for undefined levelcodes.
