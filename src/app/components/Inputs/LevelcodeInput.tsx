@@ -8,8 +8,7 @@ import './styles/LevelcodeInput.css'
 
 function checkLevelCode(levelCode: string) {
 	return levelCode 
-		&& levelCode.length == 9
-		&& levelCode[4] == "-"
+		&& /^[A-Z0-9]{4}\-[A-Z0-9]{4}$/.test(levelCode)
 }
 
 export declare interface ILevelcodeInputProps {

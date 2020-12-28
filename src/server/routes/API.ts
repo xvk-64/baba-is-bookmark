@@ -41,8 +41,7 @@ async function unzipBuffer(buffer: InputType) {
 // Checks that a levelcode is formatted correctly
 function checkLevelCode(levelCode: string) {
 	return levelCode !== undefined
-		&& levelCode.length === 9
-		&& levelCode[4] === "-"
+		&& /^[A-Z0-9]{4}\-[A-Z0-9]{4}$/.test(levelCode)
 }
 
 // Download and decode a file to a buffer from the official server
