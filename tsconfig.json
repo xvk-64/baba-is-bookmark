@@ -18,7 +18,11 @@
 			"@components/*": [ "app/components/*" ],
 			"@routes/*": [ "app/components/routes/*" ],
 			"@assets/*": [ "app/assets/*" ]
-		}
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "./src/common/typings"
+    ]
   },
   "include": [
     "src/",
