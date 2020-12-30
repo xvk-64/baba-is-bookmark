@@ -197,14 +197,14 @@ router.get("/level/download/", async(request, response) => {
 	}
 
 	// Try and download from the server
-	let download = downloadLevelData(levelCode)
-	download.catch(e => {
+	let [e, levelData] = await downloadLevelData(levelCode)
+		.then(result => [null, result], error => [error, null])
+
+	if (e) {
 		response.statusCode = 500
 		response.json({error: true, message: `Couldn't download! Reason: ${e.message}`})
 		return
-	})
-
-	let levelData = await download
+	}
 
 	response.json({success: true, data: levelData})
 })
@@ -226,13 +226,14 @@ router.get("/level/thumbnail/", async(request, response) => {
 		return
 	}
 
-	let download = getThumbnail(levelCode)
-	download.catch(e => {
+	let [e, result] = await getThumbnail(levelCode)
+		.then(result => [null, result], error => [error, null])
+	
+	if (e) {
 		response.statusCode = 500
 		response.json({error: true, message: `Couldn't download: ${e.message}`})
 		return
-	})
-	let result = await download
+	}
 
 	response.json({success: true, data: result})
 })
@@ -253,17 +254,16 @@ router.get("/level/raw/ld/", async(request, response) => {
 		return
 	}
 
-	let download = downloadFile(levelCode + ".ld")
-	
-	download.catch(e => {
+	let [e, buffer] = await downloadFile(levelCode + ".ld")
+		.then(result => [null, result], error => [error, null])
+
+	if (e) {
 		response.statusCode = 500
 		response.json({error: true, message: `Download error: ${e.message}`})
 		return
-	})
+	}
 
-	let buf = <Buffer>await download
-
-	response.json({success: true, data: buf.toString()})
+	response.json({success: true, data: buffer.toString()})
 })
 
 // Gets a raw .l file from a levelcode
@@ -282,16 +282,16 @@ router.get("/level/raw/l/", async(request, response) => {
 		return
 	}
 	
-	let download = downloadFile(levelCode + ".l")
-	download.catch(e => {
+	let [e, buffer] = await downloadFile(levelCode + ".l")
+		.then(result => [null, result], error => [error, null])
+
+	if (e) {
 		response.statusCode = 500
 		response.json({error: true, message: `Download error: ${e.message}`})
 		return
-	})
+	}
 
-	let buf = <Buffer>await download
-
-	response.json({success: true, data: buf.toString('base64')})
+	response.json({success: true, data: buffer.toString('base64')})
 })
 
 // Download level data for a code from the official server and insert it into the database
@@ -319,21 +319,24 @@ router.post("/level", async(request, response) => {
 	}
 
 	// Try and download from the server
-	let download = downloadLevelData(levelCode)
-	download.catch(e => {
+	let [e, levelData] = await downloadLevelData(levelCode)
+		.then(result => [null, result], error => [error, null])
+
+	if (e) {
 		response.statusCode = 500
 		response.json({error: true, message: `Download error: ${e.message}`})
 		return
-	})
-	let levelData = await download
-		
+	}
+
 	// Insert into database
-	await insertLevelData(levelData)
-		.catch(e => {
-			response.statusCode = 500
-			response.json({error: true, message: `Database error: ${e.message}`})
-			return
-		})
+	e = await insertLevelData(levelData)
+		.catch(e => e)
+		
+	if (e) {
+		response.statusCode = 500
+		response.json({error: true, message: `Database error: ${e.message}`})
+		return
+	}
 
 	response.json({success: true, message: `Inserted level ${levelCode} successfully`})
 })
