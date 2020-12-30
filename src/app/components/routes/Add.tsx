@@ -45,7 +45,7 @@ export default function Add() {
 		setInfo("")
 
 		if (json.error) {
-			console.log(json.message)
+			console.log(json)
 			setError("An error occurred!")
 			return
 		}
