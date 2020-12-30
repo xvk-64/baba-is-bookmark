@@ -62,7 +62,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 			// Some other error
 			if (!json.notFound) {
 				// Notfound is acceptable since we want the level to not exist yet
-				console.log(json.message)
+				console.log(json)
 				setError("An internal server error occured! Please try again.")
 				return
 			}
@@ -73,6 +73,8 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		json = await result.json()
 
 		if (json.error) {
+			console.log(json)
+
 			props.onLevelData({code: ""})
 			setError("Level does not exist!")
 			return
