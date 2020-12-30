@@ -1,11 +1,17 @@
 ## v0.4.3b - 30th December, 2020
-- Miscelaneous bug fixes
+- Miscellaneous bug fixes
+
+---
 
 ## v0.4.2b - 30th December, 2020
 - Fixed API bug relating to error handling in bad requests.
 
+---
+
 ## v0.4.1b - 29th December, 2020
 - Updated project repository README.
+
+---
 
 ## v0.4.0b - 29th December, 2020
 ### New features and changes
