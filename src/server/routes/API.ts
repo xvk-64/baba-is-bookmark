@@ -329,12 +329,12 @@ router.post("/level", async(request, response) => {
 	}
 
 	// Insert into database
-	e = await insertLevelData(levelData)
-		.catch(e => e)
+	let dbError = await insertLevelData(levelData)
+		.then(result => null, error => error)
 		
-	if (e) {
+	if (dbError) {
 		response.statusCode = 500
-		response.json({error: true, message: `Database error: ${e.message}`})
+		response.json({error: true, message: `Database error: ${dbError.message}`})
 		return
 	}
 
