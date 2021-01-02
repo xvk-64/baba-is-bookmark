@@ -84,8 +84,7 @@ async function downloadLevelData(levelCode: string) {
 
 	let result = await download
 
-	return await parseLevelData(levelCode, result);
-
+	return parseLevelData(levelCode, result);
 }
 
 // Parses the .ld files downloaded from the official server
@@ -145,7 +144,7 @@ async function getThumbnail(levelCode: string) {
 	return "data:image/png;base64," + buf.toString("base64")
 }
 
-// Get level data for a code from the database
+// Get level data for a code
 router.get("/level/", async (request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400
@@ -164,15 +163,53 @@ router.get("/level/", async (request, response) => {
 	let levelData = await getLevelData(levelCode)
 
 	if (levelData === undefined) {
-		response.statusCode = 404
-		response.json({error: true, notFound: true, message: `Couldn't find a level with that levelcode!`})
-		return
+		// Download from official server
+		let [e, downloadedLevelData] = await downloadLevelData(levelCode)
+			.then(result => [null, result], error => [error, null])
+
+		if (e) {
+			response.statusCode = 404
+			response.json({error: true, notFound: true, message: `Couldn't find a level with that levelcode!`})
+			return
+		}
+
+		levelData = downloadedLevelData
 	}
 	
 	response.json({success: true, data: levelData})
 })
 
+router.get("/level/exists/", async(request, response) => {
+	if (request.query["code"] === undefined) {
+		response.statusCode = 400
+		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		return
+	}
+
+	let levelCode = request.query["code"] + ""
+	
+	if (!checkLevelCode(levelCode)) {
+		response.statusCode = 400
+		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		return
+	}
+
+	let [e, result] = await downloadFile(levelCode + ".ld")
+		.then(result => [null, result], error => [error, null])
+
+	let levelExists = e == null
+
+
+	let levelData = await getLevelData(levelCode)
+
+	let levelIsSubmited = levelData !== undefined
+
+
+	response.json({success: true, data: {exists: levelExists, submitted: levelIsSubmited}})
+})
+
 // Download level data for a code from the official server
+// DEPRECATED
 router.get("/level/download/", async(request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400

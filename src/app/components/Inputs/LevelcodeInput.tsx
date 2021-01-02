@@ -40,6 +40,7 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 	
 	async function checkDatabase() {
 		setError("")
+		setValid(false)
 
 		// Check if the code is formatted properly
 		if (!checkLevelCode(code)) {
@@ -50,39 +51,40 @@ export default function LevelcodeInput(props: ILevelcodeInputProps) {
 		props.onLevelData({code: "", name: "Loading..."})
 
 		// Check the database to see if the level already exists
-		let result = await fetch(process.env.API_URL + "/level/?code=" + code)
+		let result = await fetch(process.env.API_URL + "/level/exists/?code=" + code)
 		
 		let json = await result.json()
 
 		if (json.success) {
-			setError("Database already contains level!")
-			props.onLevelData(getLevelData(json.data))
-			return
-		} else if (json.error) {
-			// Some other error
-			if (!json.notFound) {
-				// Notfound is acceptable since we want the level to not exist yet
-				console.log(json)
-				setError("An internal server error occured! Please try again.")
+			if (json.data.submitted) {
+				setError("Level has already been submitted!")
+			} else if (!json.data.exists) {
+				setError("Level does not exist!")
+				props.onLevelData({code: ""})
 				return
+			} else {
+				setValid(true)
 			}
+		} else if (json.error) {
+			console.log(json)
+			setError("An internal server error occured! Please try again.")
+			props.onLevelData({code: ""})
+			return
 		}
 
-		// Check if the level exists on the official server
-		result = await fetch(process.env.API_URL + "/level/download/?code=" + code)
+		// Get the LevelData
+		result = await fetch(process.env.API_URL + "/level/?code=" + code)
 		json = await result.json()
 
 		if (json.error) {
 			console.log(json)
 
+			setError("An internal server error occured! Please try again.")
 			props.onLevelData({code: ""})
-			setError("Level does not exist!")
 			return
 		}
 
 		props.onLevelData(getLevelData(json.data))
-
-		setValid(true)
 	}
 
 	function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
