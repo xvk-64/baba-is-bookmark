@@ -38,14 +38,19 @@ All other responses are objects of the form `{success:true, data:...}`
 
 |Method|URL|Query|Result|Notes|
 |:----:|:-:|:---:|------|-----|
-|GET|`/level/`|`code`|Returns a LevelData for the level with the specified levelcode|Only returns levels submitted to this API, does not check for levels on the official server.|
+|GET|`/level/`|`code`|Returns a LevelData for the level with the specified levelcode||
 |POST|`/level/`|`code` (request body)|Submits a levelcode to Baba Is Bookmark|Will return error if level is already submitted|
-|GET|`/level/download/`|`code`|Returns a LevelData for the level with the specified levelcode|Gets data directly from official server, bypasses API database. Is slower than `/level`|
+|GET|`/level/exists/`|`code`|Queries whether a level exists or not.|Returns object `{exists: boolean, submitted: boolean}`|
 |GET|`/level/thumbnail/`|`code`|Returns a data URI for a level's thumbnail||
-|GET|`/level/raw/ld`|`code`|Returns level's .ld file||
-|GET|`/level/raw/l`|`code`|Returns level's .l file|Since a .l file is a binary blob, the response data is encoded in Base64|
-|GET|`/browse/`|`search`, (`time` \| ([`before`], `after`))|Returns a list of LevelData, dictated by "search" and between "before" and "after", or since "time" days ago.|Refrain from using this endpoint extensively, since it can be computationally expensive.|  
+|GET|`/level/raw/ld/`|`code`|Returns level's .ld file||
+|GET|`/level/raw/l/`|`code`|Returns level's .l file|Since a .l file is a binary blob, the response data is encoded in Base64|
+|GET|`/browse/`|`search`, (`time` \| ([`before`], `after`))|Returns a list of LevelData, dictated by "search" and between "before" and "after", or since "time" days ago.||  
   
+## Deprecated API endpoints
+|Method|URL|Query|Result|Notes|
+|:----:|:-:|:---:|------|-----|
+|GET|`/level/download/`|`code`|Returns a LevelData for the level with the specified levelcode|Gets data directly from official server, bypasses API database. Is slower than `/level/`. DEPRECATED. Please use `/level/` instead.|
+
 ## `LevelData` objects
 
 Fields suffixed with `?` are optional and could potentially be undefined
