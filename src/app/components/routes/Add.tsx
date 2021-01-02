@@ -15,7 +15,7 @@ export default function Add() {
 	let [success, setSuccess] = useState("")
 	let [info, setInfo] = useState("")
 
-	function onLevelData(levelData: LevelData) {
+	function handleLevelData(levelData: LevelData) {
 		setError("")
 		setSuccess("")
 		setInfo("")
@@ -32,7 +32,7 @@ export default function Add() {
 			code: levelCode
 		}
 
-		let result = await fetch(process.env.API_URL + "/level", {
+		let result = await fetch(process.env.API_URL + "/level/", {
 			method: "POST",
 			headers: {
 				'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ export default function Add() {
 				<span className="success">{success}</span>
 				<span className="info">{info}</span>
 			</p>
-			<LevelcodeInput onLevelData={onLevelData} onSubmit={handleSubmit}/>
+			<LevelcodeInput onLevelData={handleLevelData} onSubmit={handleSubmit}/>
 			<Level levelData={displayLevelData}/>
 		</div>
 	)

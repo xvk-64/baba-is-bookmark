@@ -1,3 +1,14 @@
+## v0.5.0b - 2nd January, 2021
+- Fixed some typos in the README.
+- The client has been updated to use the new API changes.
+
+### API changes
+- The `/level/` endpoint is now responsible for getting data from both the database and the official server, whichever is available.
+- As a consequence of this, the `/level/download/` endpoint has now been deprecated.
+- Added a new endpoint: `/level/exists/`. This endpoint returns whether a level exists and whether it has been submitted already or not.
+
+---
+
 ## v0.4.3b - 30th December, 2020
 - Miscellaneous bug fixes
 
