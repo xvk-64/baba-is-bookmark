@@ -2,10 +2,10 @@ import express from "express"
 import path from "path"
 import fs, { existsSync } from "fs"
 import fetch from "node-fetch"
-import {InputType, unzip} from "zlib"
+import { InputType, unzip } from "zlib"
 import { Pool } from 'pg';
 
-import {LevelData} from "common/LevelData"
+import { LevelData } from "common/LevelData"
 
 const tempDir = path.join(__dirname, "temp")
 if (!fs.existsSync(tempDir))
@@ -19,7 +19,6 @@ const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
 	ssl: (process.env.IS_PRODUCTION ? { rejectUnauthorized: false } : false)
 });
-
 
 // Greet a user
 router.get("/", (request, response) => {
@@ -64,16 +63,16 @@ async function downloadFile(fileName: string, decode: boolean = true) {
 	if (!res.ok) {
 		throw Error("Server did not return response code 200 OK!")
 	}
-	
+
 	let buf = await res.buffer()
-	
+
 	if (decode) {
 		let decoded = await unzipBuffer(buf)
-		
+
 		fs.writeFileSync(destination, decoded)
 		return decoded
 	} else {
-		fs.writeFileSync(destination, buf)	
+		fs.writeFileSync(destination, buf)
 		return buf
 	}
 }
@@ -88,7 +87,7 @@ async function downloadLevelData(levelCode: string) {
 }
 
 // Parses the .ld files downloaded from the official server
-function parseLevelData(levelcode: string, buffer: Buffer) : LevelData {
+function parseLevelData(levelcode: string, buffer: Buffer): LevelData {
 	let levelData: LevelData = {
 		// Need to assign levelcode here, since .ld files are not consistent in defining it 
 		code: levelcode,
@@ -121,17 +120,17 @@ function parseLevelData(levelcode: string, buffer: Buffer) : LevelData {
 }
 
 // Searches the database for a level with the specified levelCode
-async function getLevelData(levelCode: string) : Promise<LevelData> {
+async function getLevelData(levelCode: string): Promise<LevelData> {
 	let result = await pool.query('SELECT * FROM levels WHERE code = $1', [levelCode])
-	
+
 	return result.rows[0]
 }
 
 // Inserts leveldata into the database
-async function insertLevelData(levelData: LevelData) : Promise<LevelData> {
+async function insertLevelData(levelData: LevelData): Promise<LevelData> {
 	let result = await pool.query('INSERT INTO levels(code, name, author, timestamp, difficulty, description) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
-	, [levelData.code, levelData.name, levelData.author, levelData.timestamp, levelData.difficulty, levelData.description])
-	
+		, [levelData.code, levelData.name, levelData.author, levelData.timestamp, levelData.difficulty, levelData.description])
+
 	return result.rows[0]
 }
 
@@ -148,18 +147,18 @@ async function getThumbnail(levelCode: string) {
 router.get("/level/", async (request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		response.json({ error: true, message: "Missing \"code\" field on request query!" })
 		return
 	}
 
 	let levelCode = request.query["code"] + ""
-	
+
 	if (!checkLevelCode(levelCode)) {
 		response.statusCode = 400
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		response.json({ error: true, message: `Incorrect levelcode formatting!` })
 		return
 	}
-	
+
 	let levelData = await getLevelData(levelCode)
 
 	if (levelData === undefined) {
@@ -169,28 +168,29 @@ router.get("/level/", async (request, response) => {
 
 		if (e) {
 			response.statusCode = 404
-			response.json({error: true, notFound: true, message: `Couldn't find a level with that levelcode!`})
+			response.json({ error: true, notFound: true, message: `Couldn't find a level with that levelcode!` })
 			return
 		}
 
 		levelData = downloadedLevelData
 	}
-	
-	response.json({success: true, data: levelData})
+
+	response.json({ success: true, data: levelData })
 })
 
-router.get("/level/exists/", async(request, response) => {
+// Check whether a level actually exists on the official server
+router.get("/level/exists/", async (request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		response.json({ error: true, message: "Missing \"code\" field on request query!" })
 		return
 	}
 
 	let levelCode = request.query["code"] + ""
-	
+
 	if (!checkLevelCode(levelCode)) {
 		response.statusCode = 400
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		response.json({ error: true, message: `Incorrect levelcode formatting!` })
 		return
 	}
 
@@ -205,52 +205,14 @@ router.get("/level/exists/", async(request, response) => {
 	let levelIsSubmited = levelData !== undefined
 
 
-	response.json({success: true, data: {exists: levelExists, submitted: levelIsSubmited}})
-})
-
-// Download level data for a code from the official server
-// DEPRECATED
-router.get("/level/download/", async(request, response) => {
-	if (request.query["code"] === undefined) {
-		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request query!"})
-		return
-	}
-
-	let levelCode = request.query["code"] + ""
-
-	// Check formatting of levelcode
-	if (!checkLevelCode(levelCode)) {
-		response.statusCode = 400
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
-		return
-	}
-
-	// Check if level is already in database
-	if (await getLevelData(levelCode)) {
-		response.statusCode = 500
-		response.json({error: true, message: `Level already exists in database!`})
-		return
-	}
-
-	// Try and download from the server
-	let [e, levelData] = await downloadLevelData(levelCode)
-		.then(result => [null, result], error => [error, null])
-
-	if (e) {
-		response.statusCode = 500
-		response.json({error: true, message: `Couldn't download! Reason: ${e.message}`})
-		return
-	}
-
-	response.json({success: true, data: levelData})
+	response.json({ success: true, data: { exists: levelExists, submitted: levelIsSubmited } })
 })
 
 // Download from official server/retreive thumbnail from cache
-router.get("/level/thumbnail/", async(request, response) => {
+router.get("/level/thumbnail/", async (request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		response.json({ error: true, message: "Missing \"code\" field on request query!" })
 		return
 	}
 
@@ -259,35 +221,35 @@ router.get("/level/thumbnail/", async(request, response) => {
 	// Check formatting of levelcode
 	if (!checkLevelCode(levelCode)) {
 		response.statusCode = 400
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		response.json({ error: true, message: `Incorrect levelcode formatting!` })
 		return
 	}
 
 	let [e, result] = await getThumbnail(levelCode)
 		.then(result => [null, result], error => [error, null])
-	
+
 	if (e) {
 		response.statusCode = 500
-		response.json({error: true, message: `Couldn't download: ${e.message}`})
+		response.json({ error: true, message: `Couldn't download: ${e.message}` })
 		return
 	}
 
-	response.json({success: true, data: result})
+	response.json({ success: true, data: result })
 })
 
 // Gets a raw .ld file from a levelcode
-router.get("/level/raw/ld/", async(request, response) => {
+router.get("/level/raw/ld/", async (request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		response.json({ error: true, message: "Missing \"code\" field on request query!" })
 		return
 	}
 
 	let levelCode = request.query["code"] + ""
-	
+
 	if (!checkLevelCode(levelCode)) {
 		response.statusCode = 400
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		response.json({ error: true, message: `Incorrect levelcode formatting!` })
 		return
 	}
 
@@ -296,18 +258,18 @@ router.get("/level/raw/ld/", async(request, response) => {
 
 	if (e) {
 		response.statusCode = 500
-		response.json({error: true, message: `Download error: ${e.message}`})
+		response.json({ error: true, message: `Download error: ${e.message}` })
 		return
 	}
 
-	response.json({success: true, data: buffer.toString()})
+	response.json({ success: true, data: buffer.toString() })
 })
 
 // Gets a raw .l file from a levelcode
-router.get("/level/raw/l/", async(request, response) => {
+router.get("/level/raw/l/", async (request, response) => {
 	if (request.query["code"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request query!"})
+		response.json({ error: true, message: "Missing \"code\" field on request query!" })
 		return
 	}
 
@@ -315,43 +277,43 @@ router.get("/level/raw/l/", async(request, response) => {
 
 	if (!checkLevelCode(levelCode)) {
 		response.statusCode = 400
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		response.json({ error: true, message: `Incorrect levelcode formatting!` })
 		return
 	}
-	
+
 	let [e, buffer] = await downloadFile(levelCode + ".l")
 		.then(result => [null, result], error => [error, null])
 
 	if (e) {
 		response.statusCode = 500
-		response.json({error: true, message: `Download error: ${e.message}`})
+		response.json({ error: true, message: `Download error: ${e.message}` })
 		return
 	}
 
-	response.json({success: true, data: buffer.toString('base64')})
+	response.json({ success: true, data: buffer.toString('base64') })
 })
 
 // Download level data for a code from the official server and insert it into the database
-router.post("/level", async(request, response) => {
+router.post("/level", async (request, response) => {
 	if (request.body.code === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"code\" field on request body!"})
+		response.json({ error: true, message: "Missing \"code\" field on request body!" })
 		return
 	}
-	
+
 	let levelCode = request.body.code
 
 	// Check formatting of levelcode
 	if (!checkLevelCode(levelCode)) {
 		response.statusCode = 500
-		response.json({error: true, message: `Incorrect levelcode formatting!`})
+		response.json({ error: true, message: `Incorrect levelcode formatting!` })
 		return
 	}
 
 	// Check if level is already in database
 	if (await getLevelData(levelCode)) {
 		response.statusCode = 500
-		response.json({error: true, message: `Level already exists in database!`})
+		response.json({ error: true, message: `Level already exists in database!` })
 		return
 	}
 
@@ -361,28 +323,28 @@ router.post("/level", async(request, response) => {
 
 	if (e) {
 		response.statusCode = 500
-		response.json({error: true, message: `Download error: ${e.message}`})
+		response.json({ error: true, message: `Download error: ${e.message}` })
 		return
 	}
 
 	// Insert into database
 	let dbError = await insertLevelData(levelData)
 		.then(result => null, error => error)
-		
+
 	if (dbError) {
 		response.statusCode = 500
-		response.json({error: true, message: `Database error: ${dbError.message}`})
+		response.json({ error: true, message: `Database error: ${dbError.message}` })
 		return
 	}
 
-	response.json({success: true, message: `Inserted level ${levelCode} successfully`})
+	response.json({ success: true, message: `Inserted level ${levelCode} successfully` })
 })
 
 // Get a list of levels dictated by a search term
 router.get("/browse", async (request, response) => {
 	if (request.query["search"] === undefined) {
 		response.statusCode = 400
-		response.json({error: true, message: "Missing \"search\" field on request query!"})
+		response.json({ error: true, message: "Missing \"search\" field on request query!" })
 		return
 	}
 
@@ -392,14 +354,14 @@ router.get("/browse", async (request, response) => {
 	if (request.query["time"] === undefined) {
 		if (request.query["after"] === undefined) {
 			response.statusCode = 400
-			response.json({error: true, message: "Missing \"time\" or \"after\" fields on request query!"})
+			response.json({ error: true, message: "Missing \"time\" or \"after\" fields on request query!" })
 			return
 		} else {
 			after = new Date(request.query["after"] + "")
 
 			if (isNaN(after.getTime())) {
 				response.statusCode = 400
-				response.json({error: true, message: "\"after\" field on request query is not formatted correctly!"})
+				response.json({ error: true, message: "\"after\" field on request query is not formatted correctly!" })
 				return
 			}
 
@@ -408,7 +370,7 @@ router.get("/browse", async (request, response) => {
 
 				if (isNaN(after.getTime())) {
 					response.statusCode = 400
-					response.json({error: true, message: "\"before\" field on request query is not formatted correctly!"})
+					response.json({ error: true, message: "\"before\" field on request query is not formatted correctly!" })
 					return
 				}
 			}
@@ -418,7 +380,7 @@ router.get("/browse", async (request, response) => {
 
 		if (isNaN(timeInterval) || timeInterval < 0)
 			timeInterval = 7
-	
+
 		if (timeInterval > 30)
 			timeInterval = 30
 
@@ -431,7 +393,7 @@ router.get("/browse", async (request, response) => {
 
 	if (before < after) {
 		response.statusCode = 400
-		response.json({error: true, message: "\"before\" field must be a date that is more recent than \"after\"!"})
+		response.json({ error: true, message: "\"before\" field must be a date that is more recent than \"after\"!" })
 		return
 	}
 
@@ -449,10 +411,10 @@ router.get("/browse", async (request, response) => {
 			OVERLAPS (timestamp, timestamp - interval '1 day')
 		)`
 		, [searchTerm, before, after])
-	
+
 	let levelData: LevelData[] = result.rows
 
-	response.json({success: true, data: levelData})
+	response.json({ success: true, data: levelData })
 })
 
 export default router;

@@ -1,5 +1,5 @@
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const HTMLWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require("webpack");
 const path = require("path");
@@ -7,6 +7,7 @@ const path = require("path");
 var mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
+	mode: mode,
 	entry: {
 		app: "./src/app/index.tsx"
 	},
@@ -23,10 +24,10 @@ module.exports = {
 				? JSON.stringify('http://localhost:5000/api')
 				: JSON.stringify('/api'),
 			'process.env.IS_PRODUCTION': mode !== "development"
-		  })
+		})
 	],
 	devServer: {
-		contentBase: './dist/server/public',
+		static: './dist/server/public',
 		compress: true,
 		port: 9000
 	},
@@ -59,7 +60,7 @@ module.exports = {
 				use: [
 					{
 						loader: 'style-loader',
-					},				
+					},
 					{
 						loader: 'css-loader',
 					}
@@ -67,7 +68,7 @@ module.exports = {
 			},
 			{
 				test: /\.(png|jpg|gif)$/i,
-				use: [										
+				use: [
 					{
 						loader: 'file-loader',
 						options: {
@@ -101,6 +102,17 @@ module.exports = {
 					},
 				],
 			},
+			{
+				test: /\.s[ac]ss$/i,
+				use: [
+					// Creates `style` nodes from JS strings
+					"style-loader",
+					// Translates CSS into CommonJS
+					"css-loader",
+					// Compiles Sass to CSS
+					"sass-loader",
+				],
+			},
 		]
 	}
-}
+};

@@ -7,6 +7,8 @@
 
 This project is unofficial, but exists with the permission of Baba Is You's creator, [Arvi Teikari](https://www.hempuli.com/)
 
+[Check out the changelog](./src/app/components/routes/Changelog.md)
+
 # How To Use
 Baba Is Bookmark's Level Browser is an easy way to find levels. You can view all submitted levels, or search for specific ones using the searchbar on the left.
 
@@ -22,7 +24,7 @@ The other main page is for submitting levels. By typing a valid levelcode in the
 
 # Feedback
 
-For feedback about the website, you can open an issue on this repository, or alternatively, contact the projects's creator on Discord:
+For feedback or bug reports, you can open an issue on this repository, or alternatively, contact the projects's creator on Discord:
 
 SpiccyMayonnaise#2608 <@365018100338393088>
 
@@ -45,11 +47,6 @@ All other responses are objects of the form `{success:true, data:...}`
 |GET|`/level/raw/ld/`|`code`|Returns level's .ld file||
 |GET|`/level/raw/l/`|`code`|Returns level's .l file|Since a .l file is a binary blob, the response data is encoded in Base64|
 |GET|`/browse/`|`search`, (`time` \| ([`before`], `after`))|Returns a list of LevelData, dictated by "search" and between "before" and "after", or since "time" days ago.||  
-  
-## Deprecated API endpoints
-|Method|URL|Query|Result|Notes|
-|:----:|:-:|:---:|------|-----|
-|GET|`/level/download/`|`code`|Returns a LevelData for the level with the specified levelcode|Gets data directly from official server, bypasses API database. Is slower than `/level/`. DEPRECATED. Please use `/level/` instead.|
 
 ## `LevelData` objects
 

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Level from './Level'
 
-import {LevelData} from 'common/LevelData'
+import { LevelData } from 'common/LevelData'
 import BabaSelect from '@components/Inputs/BabaSelect'
 import Pagination from '@components/Pagination'
+import RainbowText from "@components/RainbowText"
 
 import Loading from '@assets/img/loading.gif'
 import Sleepy from '@assets/img/sleepy.gif'
@@ -21,12 +22,13 @@ export declare interface ILevelGalleryProps {
 const levelsPerPage = 24;
 
 const sortingOptions = [
-	{ value: 'timeAsc', label: 'Newest first'},
+	{ value: 'timeAsc', label: 'Newest first' },
 	{ value: 'timeDesc', label: 'Oldest first' },
 	{ value: 'nameAsc', label: 'Title (A-Z)' },
 	{ value: 'nameDesc', label: 'Title (Z-A)' },
 	{ value: 'authorAsc', label: 'Author (A-Z)' },
 	{ value: 'authorDesc', label: 'Author (Z-A)' },
+	{ value: 'random', label: <RainbowText text="Random!" /> }
 ];
 const defaultSortingOption = sortingOptions[0]
 
@@ -50,13 +52,10 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 
 	let sortLevels = () => {
 		let sorted: LevelData[] = []
-	
+
 		switch (sortingMethod.value) {
-			case 'timeAsc':
-				sorted = props.levels.sort((a, b) => (a.timestamp && b.timestamp) && a.timestamp < b.timestamp ? 1 : -1)
-				break;
-			case 'timeDesc':
-				sorted = props.levels.sort((a, b) => (a.timestamp && b.timestamp) && a.timestamp > b.timestamp ? 1 : -1)
+			case 'random':
+				sorted = props.levels.sort((a, b) => Math.random() > 0.5 ? 1 : -1);
 				break;
 			case 'nameAsc':
 				sorted = props.levels.sort((a, b) => (a.name + "").localeCompare(b.name + ""))
@@ -70,8 +69,15 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 			case 'authorDesc':
 				sorted = props.levels.sort((a, b) => (b.author + "").localeCompare(a.author + ""))
 				break;
+			case 'timeDesc':
+				sorted = props.levels.sort((a, b) => (a.timestamp && b.timestamp) && a.timestamp > b.timestamp ? 1 : -1)
+				break;
+			default:
+			case 'timeAsc':
+				sorted = props.levels.sort((a, b) => (a.timestamp && b.timestamp) && a.timestamp < b.timestamp ? 1 : -1)
+				break;
 		}
-	
+
 		setSortedLevels([...sorted])
 	}
 
@@ -107,11 +113,11 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 
 	return (
 		<div className="levelGallery">
-			<Pagination currentPage={currentPage} numPages={numPages} onChange={handleCurrentPageChange}/>
+			<Pagination currentPage={currentPage} numPages={numPages} onChange={handleCurrentPageChange} />
 			{
 				(props.displayOptions !== false) ? (
 					<div className="levelGallery-options">
-						<BabaSelect 
+						<BabaSelect
 							options={sortingOptions}
 							isSearchable={false}
 							width="180px"
@@ -120,19 +126,19 @@ export default function LevelGallery(props: ILevelGalleryProps) {
 						/>
 					</div>
 				)
-				: ""
+					: ""
 			}
 
 			<div className="levelGallery-gallery-container">
 				<div className="levelGallery-gallery">
 					{
-						levelsOnCurrentPage.map(levelData => 
+						levelsOnCurrentPage.map(levelData =>
 							<Level key={levelData.code} levelData={levelData} />
-							)
-						}
+						)
+					}
 
 				</div>
-				<Pagination currentPage={currentPage} numPages={numPages} onChange={handleCurrentPageChange}/>
+				<Pagination currentPage={currentPage} numPages={numPages} onChange={handleCurrentPageChange} />
 			</div>
 
 		</div>

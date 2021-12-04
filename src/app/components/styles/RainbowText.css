@@ -1,0 +1,34 @@
+@keyframes movingText {
+	0% {top: 2px;}
+	50% {top: -2px;}
+	100% {top: 2px;}
+}
+
+@keyframes colours {
+	0% {color: #EB91CA;}
+	10% {color: #D9396A;}
+	20% {color: #E5533B;}
+	30% {color: #E49950;}
+	40% {color: #E8DD82;}
+	50% {color: #A5B13F;}
+	60% {color: #5C8339;}
+	70% {color: #83C8E5;}
+	80% {color: #9183D7;}
+	90% {color: #8E5E9C;}
+	100% {color: #81261C;}
+}
+
+
+*:hover>.rainbowText span {
+	position:relative;
+	animation: 0.5s movingText ease-in-out infinite,
+				colours 1s infinite;
+}
+
+.rainbowText span:nth-of-type(1){ animation-delay: 0.0s; }
+.rainbowText span:nth-of-type(2){ animation-delay: -0.05s; }
+.rainbowText span:nth-of-type(3){ animation-delay: -0.1s; }
+.rainbowText span:nth-of-type(4){ animation-delay: -0.15s; }
+.rainbowText span:nth-of-type(5){ animation-delay: -0.2s; }
+.rainbowText span:nth-of-type(6){ animation-delay: -0.25s; }
+.rainbowText span:nth-of-type(7){ animation-delay: -0.3s; }
