@@ -40,12 +40,14 @@
 .level-author-container {
 	font-size: 20px;
 
-	padding: 5px 10px 0px 10px;
+	padding: 5px 10px 2px 10px;
 
 	height: 20px;
 	
 	display: flex;
 	flex-direction: row;
+
+	background-color: rgba(0,0,0,0.1);
 }
 
 .level-author {

@@ -1,3 +1,12 @@
+## v0.6.0b - 4th December, 2021
+- Added a random sorting option to level browser.
+- Spent way too long figuring out how to animate the text, so you better appreciate it.
+- Made some slight styling adjustments to how the levelcode is presented.
+- Updated the README a little.
+
+### API changes
+- Removed unused API endpoint `/level/download/`.
+
 ## v0.5.0b - 2nd January, 2021
 - Fixed some typos in the README.
 - The client has been updated to use the new API changes.

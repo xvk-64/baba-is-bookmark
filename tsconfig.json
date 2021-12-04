@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noEmit": true,
@@ -14,10 +15,16 @@
     ],
     "baseUrl": "src",
     "rootDir": "src",
-		"paths": {
-			"@components/*": [ "app/components/*" ],
-			"@routes/*": [ "app/components/routes/*" ],
-			"@assets/*": [ "app/assets/*" ]
+    "paths": {
+      "@components/*": [
+        "app/components/*"
+      ],
+      "@routes/*": [
+        "app/components/routes/*"
+      ],
+      "@assets/*": [
+        "app/assets/*"
+      ]
     },
     "typeRoots": [
       "node_modules/@types",

@@ -1,45 +1,40 @@
 import React from 'react'
-import Select, { Styles } from 'react-select'
-import * as SelectProps from 'react-select'
-import {IndicatorProps} from 'react-select'
+import Select, { ClearIndicatorProps, StylesConfig, Props, MultiValueRemoveProps } from 'react-select'
 
 import dropdownIndicator from '@assets/img/icons/dropdown-arrow.png'
 import checkMark from '@assets/img/icons/check-mark.png'
 import crossMark from '@assets/img/icons/cross-mark.png'
 
-const selectStyles: Styles = {
-	
-	control: (provided, state) => ({
+const selectStyles: StylesConfig = {
+	control: (provided, state: any) => ({
 		...provided,
-		backgroundColor:"#202850",
-		border:"#4759B1 4px solid",
-		borderColor:"#4759B1",
-		transitionDuration:"revert",
-		
-		cursor: state.isDisabled ? "not-allowed" : "default",
-		
-		':hover': {
-			borderColor:"#4759B1",
-			backgroundColor:"#4759B1",
-		}
-	}),
-	container: (provided, state) => ({
-		...provided,
+		backgroundColor: "#202850",
+		border: "#4759B1 4px solid",
+		borderColor: "#4759B1",
+		transitionDuration: "revert",
+
 		width: state.selectProps.width,
+		// height: "100px",
+
+		cursor: state.isDisabled ? "not-allowed" : "pointer",
+
+		':hover': {
+			borderColor: "#4759B1",
+			backgroundColor: "#4759B1",
+		}
 	}),
 	valueContainer: (provided, state) => ({
 		...provided,
-		paddingRight: "2px"
+		paddingRight: "2px",
 	}),
 	placeholder: (provided, state) => ({
 		...provided,
-		color:"lightgray"
+		color: "lightgray"
 	}),
 	menu: (provided, state) => ({
 		...provided,
-		backgroundColor:"#202850",
-		width: "100%",
-		zIndex: 5
+		backgroundColor: "#202850",
+		// zIndex: 5
 	}),
 	option: (provided, state) => ({
 		...provided,
@@ -57,11 +52,6 @@ const selectStyles: Styles = {
 	}),
 	input: (provided, state) => ({
 		fontFamily: "Baba"
-	}),
-	singleValue: (provided, state) => ({
-		color:"white",
-		fontSize:20,
-		lineHeight:1
 	}),
 	multiValue: (provided, state) => ({
 		...provided,
@@ -81,12 +71,19 @@ const selectStyles: Styles = {
 	clearIndicator: (provided, state) => ({
 		...provided,
 		cursor: "pointer",
-	})
-	
+	}),
+	singleValue: (provided, state) => ({
+		color: "white",
+		fontSize: 20,
+		lineHeight: 1,
+
+		// Terrible hack to avoid some wierd misalignment from react-select
+		transform: "translate(0, -50%)"
+	}),
 }
 
-interface BabaSelectProps extends SelectProps.Props<SelectProps.OptionTypeBase, boolean> {
-	width?: string
+interface BabaSelectProps extends Props<any, boolean> {
+	width?: string,
 }
 
 function DropdownIndicator() {
@@ -96,30 +93,21 @@ function DropdownIndicator() {
 		</div>
 	)
 }
-function ClearIndicator(props: IndicatorProps<SelectProps.OptionTypeBase, boolean>) {
+function ClearIndicator(props: ClearIndicatorProps) {
 	return (
-	  <div
-		{...props.innerProps}
-		className={props.className}
-		style={{cursor:"pointer"}}
-	  >
-		{props.children || <img src={crossMark} />}
-	  </div>
+		<div
+			{...props.innerProps}
+			className={props.className}
+			style={{ cursor: "pointer" }}
+		>
+			{props.children || <img src={crossMark} />}
+		</div>
 	);
-  };
-
-type MultiValueRemoveProps = {
-	children: Node,
-	data: any,
-	innerProps: {
-		className: string,
-	},
-	selectProps: any,
 };
 
 function MultiValueRemove(props: MultiValueRemoveProps) {
 	return <div {...props.innerProps}>{props.children || <img src={crossMark} width={15} />}</div>;
-  }
+}
 
 export default function BabaSelect(props: BabaSelectProps) {
 	return (
@@ -128,8 +116,8 @@ export default function BabaSelect(props: BabaSelectProps) {
 			components={{
 				DropdownIndicator: DropdownIndicator,
 				ClearIndicator: ClearIndicator,
-				IndicatorSeparator:() => null,
-				MultiValueRemove:MultiValueRemove
+				IndicatorSeparator: null,
+				MultiValueRemove: MultiValueRemove
 			}}
 			styles={selectStyles}
 		/>

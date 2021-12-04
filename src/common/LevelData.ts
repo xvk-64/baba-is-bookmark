@@ -1,4 +1,4 @@
-export interface LevelData {
+ export interface LevelData {
 	code: string
 
 	name?: string

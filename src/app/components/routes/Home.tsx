@@ -17,21 +17,21 @@ export default function Home() {
 			<div className="home-section-container">
 				<div className="home-section">
 					<p>
-						Baba Is Bookmark is a web app that makes browsing for<br/>
+						Baba Is Bookmark is a web app that makes browsing for<br />
 						and sharing levels made in <a href="https://hempuli.com/baba/">Baba Is You</a> easier!
 					</p>
 					<p>
-						To get started, head over to the <NavLink to="/browse">Level Browser</NavLink>.<br/>
+						To get started, head over to the <NavLink to="/browse">Level Browser</NavLink>.<br />
 						You can also <NavLink to="/add">Submit Levels</NavLink> that you've created.
 					</p>
 				</div>
 				<div className="home-section">
-					<img src={BabaPlanet}/>
+					<img src={BabaPlanet} />
 				</div>
 				<div className="home-section">
 					<p>
 						<a href="https://github.com/SpiccyMayonnaise/baba-is-bookmark">
-							Contribute on GitHub! 
+							Contribute on GitHub!
 							<img src={GithubLogo} />
 						</a>
 					</p>
@@ -41,7 +41,7 @@ export default function Home() {
 						</NavLink>
 					</p>
 					<p>
-						This project is copyright (c) SpiccyMayonnaise, 2020.
+						This project is copyright (c) SpiccyMayonnaise, 2020-2022.
 					</p>
 				</div>
 			</div>
