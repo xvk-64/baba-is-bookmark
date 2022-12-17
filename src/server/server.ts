@@ -1,4 +1,4 @@
-import http = require('http')
+import * as http from "http";
 import path = require('path')
 import express = require('express')
 import cors = require('cors')
