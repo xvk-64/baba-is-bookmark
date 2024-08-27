@@ -41,7 +41,7 @@ export default function Home() {
 						</NavLink>
 					</p>
 					<p>
-						This project is copyright (c) SpiccyMayonnaise, 2020-2022.
+						xvk-64, 2020-{new Date().getFullYear()}.
 					</p>
 				</div>
 			</div>

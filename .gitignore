@@ -13,6 +13,7 @@
 /dist
 
 temp
+.idea/
 
 # misc
 .DS_Store
